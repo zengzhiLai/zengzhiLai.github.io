@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="LNMP动态软件架构​    LNMP动态网站部署架构是一套由Linux+ Nginx + MySQL + PHP组成的动态网站系统解决方案，具有免费、高效、扩展性强且资源消耗低等优良特性。 ​    本实验将采用源码包方式安装服务程序，然后使用Discuz! X3.2版本论坛系统验证架构环境 。">
+<meta name="keywords" content="Linux,Nginx,MySQL,PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用LNMP架构部署动态网站环境">
+<meta property="og:url" content="https://lzz001.gitee.io/2019/07/13/使用LNMP架构部署动态网站环境/index.html">
+<meta property="og:site_name" content="小智的博客">
+<meta property="og:description" content="LNMP动态软件架构​    LNMP动态网站部署架构是一套由Linux+ Nginx + MySQL + PHP组成的动态网站系统解决方案，具有免费、高效、扩展性强且资源消耗低等优良特性。 ​    本实验将采用源码包方式安装服务程序，然后使用Discuz! X3.2版本论坛系统验证架构环境 。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/LNMP/1.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/LNMP/2.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/LNMP/3.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/LNMP/4.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/LNMP/5-1.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/LNMP/5-2.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/LNMP/6.png">
+<meta property="og:updated_time" content="2019-08-15T06:35:15.229Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用LNMP架构部署动态网站环境">
+<meta name="twitter:description" content="LNMP动态软件架构​    LNMP动态网站部署架构是一套由Linux+ Nginx + MySQL + PHP组成的动态网站系统解决方案，具有免费、高效、扩展性强且资源消耗低等优良特性。 ​    本实验将采用源码包方式安装服务程序，然后使用Discuz! X3.2版本论坛系统验证架构环境 。">
+<meta name="twitter:image" content="https://gitee.com/lzz001/img/raw/master/LNMP/1.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://lzz001.gitee.io/2019/07/13/使用LNMP架构部署动态网站环境/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>使用LNMP架构部署动态网站环境 | 小智的博客</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?297412c3c8589eb0dc190e2d81f12097";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/zengzhiLai" target="_blank" class="github-corner" aria-label="View source on GitHub">
+		<svg width="100" height="100" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+			<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+			<path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+		</svg>
+	</a>
+	<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小智的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">慢即是快</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lzz001.gitee.io/2019/07/13/使用LNMP架构部署动态网站环境/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小智">
+      <meta itemprop="description" content="Java,Linux,Mysql">
+      <meta itemprop="image" content="/images/zhi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小智的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用LNMP架构部署动态网站环境
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-13 15:01:30" itemprop="dateCreated datePublished" datetime="2019-07-13T15:01:30+08:00">2019-07-13</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-15 14:35:15" itemprop="dateModified" datetime="2019-08-15T14:35:15+08:00">2019-08-15</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="LNMP动态软件架构"><a href="#LNMP动态软件架构" class="headerlink" title="LNMP动态软件架构"></a>LNMP动态软件架构</h1><p>​    LNMP动态网站部署架构是一套由<strong>Linux</strong>+ <strong>Nginx</strong> + <strong>MySQL</strong> + <strong>PHP</strong>组成的动态网站系统解决方案，具有免费、高效、扩展性强且资源消耗低等优良特性。</p>
+<p>​    本实验将采用源码包方式安装服务程序，然后使用Discuz! X3.2版本论坛系统验证架构环境 。</p>
+<a id="more"></a>
+
+
+<p>源码包安装的优势：</p>
+<blockquote>
+<p>源码包的可移植性非常好，几乎可以在任何Linux系统中安装使用，而RPM软件包是针对特定系统和架构编写的指令集，必须严格地符合执行环境才能顺利安装（即只会去“生硬地”安装服务程序）。</p>
+<p>使用源码包安装服务程序时会有一个编译过程，因此可以更好地适应安装主机的系统环境，运行效率和优化程度都会强于使用RPM软件包安装的服务程序。也就是说，可以将采用源码包安装服务程序的方式看作是针对系统的“量体裁衣”。</p>
+</blockquote>
+<h2 id="配置Yum软件仓库"><a href="#配置Yum软件仓库" class="headerlink" title="配置Yum软件仓库"></a>配置Yum软件仓库</h2><p>把光盘设备中的系统镜像挂载到/media/cdrom目录 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> mkdir -p /media/cdrom</span><br><span class="line"><span class="meta">#</span> mount /dev/cdrom /media/cdrom</span><br><span class="line">mount: /dev/sr0 is write-protected, mounting read-only</span><br></pre></td></tr></table></figure>
+
+<p>创建Yum仓库的配置文件 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/yum.repos.d/rhel7.repo</span><br><span class="line">[rhel7]</span><br><span class="line">name=rhel7</span><br><span class="line">baseurl=file:///media/cdrom</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br></pre></td></tr></table></figure>
+
+<p>设置成开机自动挂载（否则开机后yum安装会报错）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/fstab</span><br><span class="line">/dev/cdrom /media/cdrom iso9660 defaults 0 0</span><br></pre></td></tr></table></figure>
+
+<p>安装编译程序源码的环境，需具备C语言、C++语言、Perl语言的编译器，以及各种常见的编译支持函数库程序 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> yum install -y apr* autoconf automake bison bzip2 bzip2* compat* cpp curl curl-devel fontconfig fontconfig-devel freetype freetype* freetype-devel gcc gcc-c++ gd gettext gettext-devel glibc kernel kernel-headers keyutils keyutils-libs-devel krb5-devel libcom_err-devel libpng libpng-devel libjpeg* libsepol-devel libselinux-devel libstdc++-devel libtool* libgomp libxml2 libxml2-devel libXpm* libtiff libtiff* make mpfr ncurses* ntp openssl openssl-devel patch pcre-devel perl php-common php-gd policycoreutils telnet t1lib t1lib* nasm nasm* wget zlib-devel</span><br><span class="line">Loaded plugins: langpacks, product-id, subscription-manager</span><br><span class="line">This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.</span><br><span class="line">......</span><br><span class="line">Complete!</span><br></pre></td></tr></table></figure>
+
+<p>将源码包发送到指定目录，<code>rz</code>后选择所需要的源码包即可发送到所在目录，若没有可先执行<code>yum install -y lrzsz</code>命令安装（<a href="https://pan.baidu.com/s/1LI8x9iEOYfvFoGkBT7Ukdg" target="_blank" rel="noopener">LNMP所需软件源码包与Discuz！软件包 提取码：1234</a>）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> rz</span><br></pre></td></tr></table></figure>
+
+<p>源码包安装Linux系统中一款常用的编译工具 CMake </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar xzvf cmake-2.8.11.2.tar.gz</span><br><span class="line"><span class="meta">#</span> cd cmake-2.8.11.2/</span><br><span class="line"><span class="meta">#</span> ./configure , make , make install</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置MySQL服务"><a href="#配置MySQL服务" class="headerlink" title="配置MySQL服务"></a>配置MySQL服务</h2><p>创建一个名为mysql的用户，专门用于负责运行MySQL数据库 </p>
+<p>将账户的Bash终端设置成nologin解释器，避免黑客通过该用户登录到服务器中，从而提高系统安全性 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> useradd mysql -s /sbin/nologin</span><br></pre></td></tr></table></figure>
+
+<p>创建一个用于保存MySQL数据库程序和数据库文件的目录，并将目录的所有者和所属组身份修改为mysql </p>
+<p>/usr/local/mysql         用于保存MySQL数据库服务程序的目录<br>/usr/local/mysql/var  用于保存真实数据库文件的目录 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> mkdir -p /usr/local/mysql/var</span><br><span class="line"><span class="meta">#</span> chown -Rf mysql:mysql /usr/local/mysql</span><br></pre></td></tr></table></figure>
+
+<p>解压、编译、安装MySQL数据库服务程序 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar xzvf mysql-5.6.19.tar.gz</span><br><span class="line"><span class="meta">#</span> cd mysql-5.6.19/</span><br><span class="line"><span class="meta">#</span> cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_DATADIR=/usr/local/mysql/var -DSYSCONFDIR=/etc;make;make install;make celan</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>- DCMAKE_INSTALL_PREFIX</td>
+<td>用于定义数据库服务程序的保存目录</td>
+</tr>
+<tr>
+<td>- DMYSQL_DATADIR</td>
+<td>用于定义真实数据库文件的目录</td>
+</tr>
+<tr>
+<td>- DSYSCONFDIR</td>
+<td>定义MySQL数据库配置文件的保存目录</td>
+</tr>
+</tbody></table>
+<p>为使MySQL数据库程序正常运转，先删除/etc目录中的默认配置文件，然后执行在MySQL数据库程序的保存目录scripts下名为mysql_install_db的脚本程序</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> rm -rf /etc/my.cnf</span><br><span class="line"><span class="meta">#</span> cd /usr/local/mysql</span><br><span class="line"><span class="meta">#</span> ./scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/var</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>命令/参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>./scripts/mysql_install_db</td>
+<td>生成系统数据库文件、新的MySQL服务配置文件</td>
+</tr>
+<tr>
+<td>–user</td>
+<td>指定MySQL服务的对应账号名称</td>
+</tr>
+<tr>
+<td>–basedir</td>
+<td>指定MySQL服务程序的保存目录</td>
+</tr>
+<tr>
+<td>–datadir</td>
+<td>指定MySQL真实数据库的文件保存目录</td>
+</tr>
+</tbody></table>
+<p>将系统新生成的MySQL数据库配置文件链接到/etc目录中</p>
+<p>将程序目录中的开机程序文件复制到/etc/rc.d/init.d目录中，以便通过service命令来管理MySQL数据库服务程序</p>
+<p>将数据库脚本文件的权限修改成755以便于让用户有执行该脚本的权限 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/mysql</span><br><span class="line"><span class="meta">#</span> ln my.cnf /etc</span><br><span class="line"><span class="meta">#</span> cp ./support-files/mysql.server /etc/rc.d/init.d/mysqld</span><br><span class="line"><span class="meta">#</span> chmod 755 /etc/rc.d/init.d/mysqld</span><br></pre></td></tr></table></figure>
+
+<p>编辑MySQL数据库脚本文件 ，basedir与datadir参数分别修改为MySQL数据库程序的保存目录和真实数据库的文件内容 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/rc.d/init.d/mysqld</span><br><span class="line">......</span><br><span class="line">basedir=/usr/local/mysql</span><br><span class="line">datadir=/usr/local/mysql/var</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>启动<code>mysqld</code>数据库服务，加入开机启动项</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> service mysqld start</span><br><span class="line">Starting MySQL... SUCCESS! </span><br><span class="line"><span class="meta">#</span> chkconfig mysqld on</span><br></pre></td></tr></table></figure>
+
+<p>手动方式将MySQL数据库服务程序需调用到的一些程序文件和函数库文件链接过来 （ 为兼容32位和64位平台 ）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> mkdir /var/lib/mysql</span><br><span class="line"><span class="meta">#</span> ln -s /usr/local/mysql/lib/mysql /usr/lib/mysql</span><br><span class="line"><span class="meta">#</span> ln -s /tmp/mysql.sock /var/lib/mysql/mysql.sock</span><br><span class="line"><span class="meta">#</span> ln -s /usr/local/mysql/include/mysql /usr/include/mysql</span><br></pre></td></tr></table></figure>
+
+<p>初始化 MySQL数据库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> mysql_secure_installation </span><br><span class="line">NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MySQL</span><br><span class="line">      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!</span><br><span class="line"></span><br><span class="line">In order to log into MySQL to secure it, we'll need the current</span><br><span class="line">password for the root user.  If you've just installed MySQL, and</span><br><span class="line">you haven't set the root password yet, the password will be blank,</span><br><span class="line">so you should just press enter here.</span><br><span class="line"></span><br><span class="line">Enter current password for root (enter for none):  （按回车即可）</span><br><span class="line">OK, successfully used password, moving on...</span><br><span class="line"></span><br><span class="line">Setting the root password ensures that nobody can log into the MySQL</span><br><span class="line">root user without the proper authorisation.</span><br><span class="line"></span><br><span class="line">Set root password? [Y/n] y  （是否设置root管理员密码）</span><br><span class="line">New password:   （输入要为root管理员设置的数据库密码）</span><br><span class="line">Re-enter new password:  （确认密码）</span><br><span class="line">Password updated successfully!</span><br><span class="line">Reloading privilege tables..</span><br><span class="line"> ... Success!</span><br><span class="line"></span><br><span class="line">By default, a MySQL installation has an anonymous user, allowing anyone</span><br><span class="line">to log into MySQL without having to have a user account created for</span><br><span class="line">them.  This is intended only for testing, and to make the installation</span><br><span class="line">go a bit smoother.  You should remove them before moving into a</span><br><span class="line">production environment.</span><br><span class="line"></span><br><span class="line">Remove anonymous users? [Y/n] y  （是否删除匿名账户）</span><br><span class="line"> ... Success!</span><br><span class="line"></span><br><span class="line">Normally, root should only be allowed to connect from 'localhost'.  This</span><br><span class="line">ensures that someone cannot guess at the root password from the network.</span><br><span class="line"></span><br><span class="line">Disallow root login remotely? [Y/n] y   （是否禁止root管理员远程登录）</span><br><span class="line"> ... Success!</span><br><span class="line"></span><br><span class="line">By default, MySQL comes with a database named 'test' that anyone can</span><br><span class="line">access.  This is also intended only for testing, and should be removed</span><br><span class="line">before moving into a production environment.</span><br><span class="line"></span><br><span class="line">Remove test database and access to it? [Y/n] y  （是否删除test数据库并取消对其的访问权限）</span><br><span class="line"> - Dropping test database...</span><br><span class="line"> ... Success!</span><br><span class="line"> - Removing privileges on test database...</span><br><span class="line"> ... Success!</span><br><span class="line"></span><br><span class="line">Reloading the privilege tables will ensure that all changes made so far</span><br><span class="line">will take effect immediately.</span><br><span class="line"></span><br><span class="line">Reload privilege tables now? [Y/n] y   （是否刷新授权表，让初始化后的设定立即生效）</span><br><span class="line"> ... Success!</span><br><span class="line"></span><br><span class="line">All done!  If you've completed all of the above steps, your MySQL</span><br><span class="line">installation should now be secure.</span><br><span class="line"></span><br><span class="line">Thanks for using MySQL!</span><br><span class="line"></span><br><span class="line">Cleaning up...</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>源码包安装时突然中断，需先执行命令<code>make clean</code>清理源码包临时文件 ，然后再 <code>make;make install</code></p>
+<h2 id="配置Nginx服务"><a href="#配置Nginx服务" class="headerlink" title="配置Nginx服务"></a>配置Nginx服务</h2><p>安装pcre软件包，用于提供Perl语言兼容的正则表达式库，Nginx服务程序用于实现伪静态功能必不可少的依赖包 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar xzvf pcre-8.35.tar.gz </span><br><span class="line"><span class="meta">#</span> cd pcre-8.35</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/pcre</span><br><span class="line"><span class="meta">#</span> make;make install;make clean</span><br></pre></td></tr></table></figure>
+
+<p>安装openssl软件包，用于提供网站加密证书服务的程序文件 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar xzvf openssl-1.0.1h.tar.gz</span><br><span class="line"><span class="meta">#</span> cd openssl-1.0.1h</span><br><span class="line"><span class="meta">#</span> ./config --prefix=/usr/local/openssl;make;make install</span><br></pre></td></tr></table></figure>
+
+<p>添加/usr/local/openssl/bin到PATH环境变量，并写入配置文件 , <code>source /etc/profile</code>命令使环境变量立即生效 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/profile</span><br><span class="line">......</span><br><span class="line">done</span><br><span class="line">export PATH=$PATH:/usr/local/mysql/bin:/usr/local/openssl/bin</span><br><span class="line">unset i</span><br><span class="line">unset -f pathmunge</span><br><span class="line"><span class="meta">#</span> source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>安装zlib软件包，用于提供压缩功能的函数库文件 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar xzvf zlib-1.2.8.tar.gz </span><br><span class="line"><span class="meta">#</span> cd zlib-1.2.8</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/zlib; make ; make install</span><br></pre></td></tr></table></figure>
+
+<p>创建一个用于执行Nginx服务程序的账户 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> useradd www -s /sbin/nologin</span><br></pre></td></tr></table></figure>
+
+<p>安装Nginx服务程序 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar xzvf nginx-1.6.0.tar.gz </span><br><span class="line"><span class="meta">#</span> cd nginx-1.6.0/</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/nginx --without-http_memcached_module --user=www --group=www --with-http_stub_status_module --with-http_ssl_module --with-http_gzip_static_module --with-openssl=/usr/local/src/openssl-1.0.1h --with-zlib=/usr/local/src/zlib-1.2.8 --with-pcre=/usr/local/src/pcre-8.35</span><br><span class="line"><span class="meta">#</span> make;make install</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">参数</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">–user</td>
+<td align="center">指定执行Nginx服务程序的用户名</td>
+</tr>
+<tr>
+<td align="center">–group</td>
+<td align="center">指定执行Nginx服务程序的用户组</td>
+</tr>
+<tr>
+<td align="center">–with-openssl</td>
+<td align="center">调用openssl软件包，指的是软件源码包的<strong>解压路径</strong></td>
+</tr>
+</tbody></table>
+<p>启动Nginx服务程序（ 在/etc/rc.d/init.d目录中创建启动脚本文件 ）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/rc.d/init.d/nginx</span><br><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"><span class="meta">#</span> nginx - this script starts and stops the nginx daemon</span><br><span class="line"><span class="meta">#</span> chkconfig: - 85 15</span><br><span class="line"><span class="meta">#</span> description: Nginx is an HTTP(S) server, HTTP(S) reverse \</span><br><span class="line"><span class="meta">#</span> proxy and IMAP/POP3 proxy server</span><br><span class="line"><span class="meta">#</span> processname: nginx</span><br><span class="line"><span class="meta">#</span> config: /etc/nginx/nginx.conf</span><br><span class="line"><span class="meta">#</span> config: /usr/local/nginx/conf/nginx.conf</span><br><span class="line"><span class="meta">#</span> pidfile: /usr/local/nginx/logs/nginx.pid</span><br><span class="line"><span class="meta">#</span> Source function library.</span><br><span class="line">. /etc/rc.d/init.d/functions</span><br><span class="line"><span class="meta">#</span> Source networking configuration.</span><br><span class="line">. /etc/sysconfig/network</span><br><span class="line"><span class="meta">#</span> Check that networking is up.</span><br><span class="line">[ "$NETWORKING" = "no" ] &amp;&amp; exit 0</span><br><span class="line">nginx="/usr/local/nginx/sbin/nginx"</span><br><span class="line">prog=$(basename $nginx)</span><br><span class="line">NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"</span><br><span class="line">[ -f /etc/sysconfig/nginx ] &amp;&amp; . /etc/sysconfig/nginx</span><br><span class="line">lockfile=/var/lock/subsys/nginx</span><br><span class="line">make_dirs() &#123;</span><br><span class="line"><span class="meta">#</span> make required directories</span><br><span class="line">user=`$nginx -V 2&gt;&amp;1 | grep "configure arguments:" | sed 's/[^*]*--user=\([^ ]*\).*/\1/g' -`</span><br><span class="line">        if [ -z "`grep $user /etc/passwd`" ]; then</span><br><span class="line">                useradd -M -s /bin/nologin $user</span><br><span class="line">        fi</span><br><span class="line">options=`$nginx -V 2&gt;&amp;1 | grep 'configure arguments:'`</span><br><span class="line">for opt in $options; do</span><br><span class="line">        if [ `echo $opt | grep '.*-temp-path'` ]; then</span><br><span class="line">                value=`echo $opt | cut -d "=" -f 2`</span><br><span class="line">                if [ ! -d "$value" ]; then</span><br><span class="line">                        # echo "creating" $value</span><br><span class="line">                        mkdir -p $value &amp;&amp; chown -R $user $value</span><br><span class="line">                fi</span><br><span class="line">        fi</span><br><span class="line">done</span><br><span class="line">&#125;</span><br><span class="line">start() &#123;</span><br><span class="line">[ -x $nginx ] || exit 5</span><br><span class="line">[ -f $NGINX_CONF_FILE ] || exit 6</span><br><span class="line">make_dirs</span><br><span class="line">echo -n $"Starting $prog: "</span><br><span class="line">daemon $nginx -c $NGINX_CONF_FILE</span><br><span class="line">retval=$?</span><br><span class="line">echo</span><br><span class="line">[ $retval -eq 0 ] &amp;&amp; touch $lockfile</span><br><span class="line">return $retval</span><br><span class="line">&#125;</span><br><span class="line">stop() &#123;</span><br><span class="line">echo -n $"Stopping $prog: "</span><br><span class="line">killproc $prog -QUIT</span><br><span class="line">retval=$?</span><br><span class="line">echo</span><br><span class="line">[ $retval -eq 0 ] &amp;&amp; rm -f $lockfile</span><br><span class="line">return $retval</span><br><span class="line">&#125;</span><br><span class="line">restart() &#123;</span><br><span class="line"><span class="meta">#</span>configtest || return $?</span><br><span class="line">stop</span><br><span class="line">sleep 1</span><br><span class="line">start</span><br><span class="line">&#125;</span><br><span class="line">reload() &#123;</span><br><span class="line"><span class="meta">#</span>configtest || return $?</span><br><span class="line">echo -n $"Reloading $prog: "</span><br><span class="line">killproc $nginx -HUP</span><br><span class="line">RETVAL=$?</span><br><span class="line">echo</span><br><span class="line">&#125;</span><br><span class="line">force_reload() &#123;</span><br><span class="line">restart</span><br><span class="line">&#125;</span><br><span class="line">configtest() &#123;</span><br><span class="line"><span class="meta">$</span>nginx -t -c $NGINX_CONF_FILE</span><br><span class="line">&#125;</span><br><span class="line">rh_status() &#123;</span><br><span class="line">status $prog</span><br><span class="line">&#125;</span><br><span class="line">rh_status_q() &#123;</span><br><span class="line">rh_status &gt;/dev/null 2&gt;&amp;1</span><br><span class="line">&#125;</span><br><span class="line">case "$1" in</span><br><span class="line">start)</span><br><span class="line">        rh_status_q &amp;&amp; exit 0</span><br><span class="line">        $1</span><br><span class="line">        ;;</span><br><span class="line">stop)</span><br><span class="line">        rh_status_q || exit 0</span><br><span class="line">        $1</span><br><span class="line">        ;;</span><br><span class="line">restart|configtest)</span><br><span class="line"><span class="meta">$</span>1</span><br><span class="line">;;</span><br><span class="line">reload)</span><br><span class="line">        rh_status_q || exit 7</span><br><span class="line">        $1</span><br><span class="line">        ;;</span><br><span class="line">force-reload)</span><br><span class="line">        force_reload</span><br><span class="line">        ;;</span><br><span class="line">status)</span><br><span class="line">        rh_status</span><br><span class="line">        ;;</span><br><span class="line">condrestart|try-restart)</span><br><span class="line">        rh_status_q || exit 0</span><br><span class="line">        ;;</span><br><span class="line">*)</span><br><span class="line">echo $"Usage: $0 &#123;start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest&#125;"</span><br><span class="line">exit 2</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+
+<p>赋予755权限，以绝对路径的方式执行脚本，<code>restart</code> 重启Nginx服务程序 ，加入到开机启动项</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> chmod 755 /etc/rc.d/init.d/nginx </span><br><span class="line"><span class="meta">#</span> /etc/rc.d/init.d/nginx restart</span><br><span class="line">Restarting nginx (via systemctl):                          [  OK  ]</span><br><span class="line"><span class="meta">#</span> chkconfig nginx on</span><br></pre></td></tr></table></figure>
+
+<p>浏览器访问服务器的IP地址看到 <strong>Welcome to nginx!</strong>标题的网页</p>
+<h2 id="配置PHP服务"><a href="#配置PHP服务" class="headerlink" title="配置PHP服务"></a>配置PHP服务</h2><p>安装汇编器yasm</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar xvzf yasm-1.2.0.tar.gz</span><br><span class="line"><span class="meta">#</span> cd yasm-1.2.0/</span><br><span class="line"><span class="meta">#</span> ./configure ; make ; make install</span><br></pre></td></tr></table></figure>
+
+<p>安装用于加密算法的扩展库程序  libmcrypt-2.5.8.tar.gz </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar xvzf libmcrypt-2.5.8.tar.gz</span><br><span class="line"><span class="meta">#</span> cd libmcrypt-2.5.8</span><br><span class="line"><span class="meta">#</span> ./configure ; make ; make install</span><br></pre></td></tr></table></figure>
+
+<p>安装用于提供视频编码器的服务程序 libvpx-v1.3.0<strong>.tar.bz2</strong> 源码包，解压的参数为 x<strong>j</strong>vf</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar xjvf libvpx-v1.3.0.tar.bz2</span><br><span class="line"><span class="meta">#</span> cd libvpx-v1.3.0</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/libvpx --enable-shared --enable-vp9; make; make install</span><br></pre></td></tr></table></figure>
+
+<p>安装用于提供标签图像文件格式的服务程序 tiff-4.0.3.tar.gz 源码包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar zxvf tiff-4.0.3.tar.gz</span><br><span class="line"><span class="meta">#</span> cd tiff-4.0.3</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/tiff --enable-shared;make;make install</span><br></pre></td></tr></table></figure>
+
+<p>安装用于提供png图片格式支持函数库的服务程序  libpng-1.6.12.tar.gz 源码包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar zxvf libpng-1.6.12.tar.gz</span><br><span class="line"><span class="meta">#</span> cd libpng-1.6.12</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/libpng --enable-shared;make;make install</span><br></pre></td></tr></table></figure>
+
+<p>安装用于用于提供字体支持引擎的服务程序 freetype-2.5.3.tar.gz 源码包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar zxvf freetype-2.5.3.tar.gz</span><br><span class="line"><span class="meta">#</span> cd freetype-2.5.3</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/freetype --enable-shared;make;make install</span><br></pre></td></tr></table></figure>
+
+<p>安装用于提供jpeg图片格式支持函数库的服务程序 jpegsrc.v9a.tar.gz 源码包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src</span><br><span class="line"><span class="meta">#</span> tar zxvf jpegsrc.v9a.tar.gz</span><br><span class="line"><span class="meta">#</span> cd jpeg-9a</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/jpeg --enable-shared;make;make install</span><br></pre></td></tr></table></figure>
+
+<p>安装用于提供图形处理的服务程序 libgd-2.1.0.tar.gz 源码包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd ..</span><br><span class="line"><span class="meta">#</span> tar zxvf libgd-2.1.0.tar.gz</span><br><span class="line"><span class="meta">#</span> cd libgd-2.1.0</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/libgd --enable-shared --with-jpeg=/usr/local/jpeg --with-png=/usr/local/libpng --with-freetype=/usr/local/freetype --with-fontconfig=/usr/local/freetype --with-xpm=/usr/ --with-tiff=/usr/local/tiff --with-vpx=/usr/local/libvpx;make;make install</span><br></pre></td></tr></table></figure>
+
+<p>安装用于提供图片生成函数库的服务程序 t1lib-5.1.2.tar.gz 源码包</p>
+<p>将/usr/lib64目录中的函数文件链接到/usr/lib目录中，以便系统能够顺利调取到函数文件 （兼容32位系统）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd ..</span><br><span class="line"><span class="meta">#</span> tar zxvf t1lib-5.1.2.tar.gz</span><br><span class="line"><span class="meta">#</span> cd t1lib-5.1.2</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/t1lib --enable-shared;make;make install</span><br><span class="line"><span class="meta">#</span> ln -s /usr/lib64/libltdl.so /usr/lib/libltdl.so </span><br><span class="line"><span class="meta">#</span> cp -frp /usr/lib64/libXpm.so* /usr/lib/</span><br></pre></td></tr></table></figure>
+
+<p>定义一个名为LD_LIBRARY_PATH的全局环境变量，帮助系统找到指定的动态链接库文件——编译php服务源码包的必须元素之一</p>
+<p>编译php服务源码包时，除了定义要安装到的目录以外，还需要依次定义配置php服务程序配置文件的保存目录、MySQL数据库服务程序所在目录、MySQL数据库服务程序配置文件所在目录，以及libpng、jpeg、freetype、libvpx、zlib、t1lib等服务程序的安装目录路径，并通过参数启动php服务程序的诸多默认功能 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd ..</span><br><span class="line"><span class="meta">#</span> tar -zvxf php-5.5.14.tar.gz</span><br><span class="line"><span class="meta">#</span> cd php-5.5.14</span><br><span class="line"><span class="meta">#</span> export LD_LIBRARY_PATH=/usr/local/libgd/lib</span><br><span class="line"><span class="meta">#</span> ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-mysql=/usr/local/mysql --with-mysqli=/usr/local/mysql/bin/mysql_config --with-mysql-sock=/tmp/mysql.sock --with-pdo-mysql=/usr/local/mysql --with-gd --with-png-dir=/usr/local/libpng --with-jpeg-dir=/usr/local/jpeg --with-freetype-dir=/usr/local/freetype --with-xpm-dir=/usr/ --with-vpx-dir=/usr/local/libvpx/ --with-zlib-dir=/usr/local/zlib --with-t1lib=/usr/local/t1lib --with-iconv --enable-libxml --enable-xml --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --enable-opcache --enable-mbregex --enable-fpm --enable-mbstring --enable-ftp --enable-gd-native-ttf --with-openssl --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --without-pear --with-gettext --enable-session --with-mcrypt --with-curl --enable-ctype ; make ; make install</span><br></pre></td></tr></table></figure>
+
+<p>删除 php 默认的配置文件，将php服务程序目录中相应的配置文件复制过来 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> rm -rf /etc/php.ini </span><br><span class="line"><span class="meta">#</span> ln -s /usr/local/php/etc/php.ini /etc/php.ini</span><br><span class="line"><span class="meta">#</span> cp php.ini-production /usr/local/php/etc/php.ini</span><br><span class="line"><span class="meta">#</span> cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf</span><br><span class="line"><span class="meta">#</span> ln -s /usr/local/php/etc/php-fpm.conf /etc/php-fpm.conf</span><br></pre></td></tr></table></figure>
+
+<p>编辑 php 主配置文件 php-fpm.conf （ :<code>set nu</code> 查看文件的行号）</p>
+<p>第25行：启用该配置文件中的pid文件保存目录<br>第148行：user参数修改为www账户<br>第149行：group参数修改为www用户组名称</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"> #</span> vim /usr/local/php/etc/php-fp</span><br><span class="line"> ......</span><br><span class="line"> 25 pid = run/php-fpm.pid</span><br><span class="line"> ......</span><br><span class="line">148 user = www</span><br><span class="line">149 group = www</span><br><span class="line"> ......</span><br></pre></td></tr></table></figure>
+
+<p>将用于管理php服务的脚本文件复制到/etc/rc.d/init.d中，赋予755权限，将 php-fpm 服务程序加入到开机启动项 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cp sapi/fpm/init.d.php-fpm /etc/rc.d/init.d/php-fpm</span><br><span class="line"><span class="meta">#</span> chmod 755 /etc/rc.d/init.d/php-fpm</span><br><span class="line"><span class="meta">#</span> chkconfig php-fpm on</span><br></pre></td></tr></table></figure>
+
+<p>编辑php.ini配置文件，在305行的disable_functions参数后面追加上要禁止的功能 </p>
+<p><strong>解释：</strong></p>
+<p>php服务程序的配置参数直接会影响到Web服务服务的运行环境，如果默认开启一些不必要且高危的功能（如允许用户在网页中执行Linux命令），则会降低网站被入侵的难度，入侵者甚至可拿到整台Web服务器的管理权限 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /usr/local/php/etc/php.ini</span><br><span class="line">......</span><br><span class="line">305 disable_functions = passthru,exec,system,chroot,scandir,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server,escapeshellcmd,dll,popen,disk_free_space,checkdnsrr,checkdnsrr,getservbyname,getservbyport,disk_total_space,posix_ctermid,posix_get_last_error,posix_getcwd,posix_getegid,posix_geteuid,posix_getgid,posix_getgrgid,posix_getgrnam,posix_getgroups,posix_getlogin,posix_getpgid,posix_getpgrp,posix_getpid,posix_getppid,posix_getpwnam,posix_getpwuid,posix_getrlimit,posix_getsid,posix_getuid,posix_isatty,posix_kill,posix_mkfifo,posix_setegid,posix_seteuid,posix_setgid,posix_setpgid,posix_setsid,posix_setuid,posix_strerror,posix_times,posix_ttyname,posix_uname</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>编辑Nginx服务程序的主配置文件，在确认参数信息填写正确后便可重启Nginx服务与php-fpm服务</p>
+<p>第2行： 负责运行Nginx服务程序的账户名称和用户组名称；<br>第45行：index参数后面是网站的首页名称<br>第65～71行：修改第69行的脚本名称路径参数，$document_root变量即为网站信息存储的根目录路径，若没有设置该变量，则Nginx服务程序无法找到网站信息，会提示“404页面未找到”的报错信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">  1 </span><br><span class="line">  2        user  www www;</span><br><span class="line">   ......</span><br><span class="line"> 43         location / &#123;</span><br><span class="line"> 44             root   html;</span><br><span class="line"> 45             index  index.html index.htm index.php forum.php;</span><br><span class="line"> 46         &#125;</span><br><span class="line">   ......</span><br><span class="line"> 65         location ~ \.php$ &#123;</span><br><span class="line"> 66             root           html;</span><br><span class="line"> 67             fastcgi_pass   127.0.0.1:9000;</span><br><span class="line"> 68             fastcgi_index  index.php;</span><br><span class="line"> 69             fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;</span><br><span class="line"> 70             include        fastcgi_params;</span><br><span class="line"> 71         &#125;</span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span> systemctl restart nginx</span><br><span class="line"><span class="meta">#</span> systemctl restart php-fpm</span><br></pre></td></tr></table></figure>
+
+<h1 id="搭建Discuz论坛"><a href="#搭建Discuz论坛" class="headerlink" title="搭建Discuz论坛"></a>搭建Discuz论坛</h1><p><code>unzip</code>命令解压Discuz_X3.2_SC_GBK.zip<br>将Nginx服务程序网站根目录的内容清空<br>复制 Discuz！论坛的系统程序即upload目录下的文件 到Nginx服务程序网站根目录<br>将Nginx服务程序的网站根目录的所有者和所属组修改为本地的www用户，赋予755权限以便于能够读、写、执行该论坛系统内的文件 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /usr/local/src/</span><br><span class="line"><span class="meta">#</span> unzip Discuz_X3.2_SC_GBK.zip</span><br><span class="line"><span class="meta">#</span> rm -rf /usr/local/nginx/html/*</span><br><span class="line"><span class="meta">#</span> mv upload/* /usr/local/nginx/html/</span><br><span class="line"><span class="meta">#</span> chown -Rf www:www /usr/local/nginx/html</span><br><span class="line"><span class="meta">#</span> chmod -Rf 755 /usr/local/nginx/html</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>浏览器访问服务器IP地址，接受Discuz!安装向导的许可协议 </p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/LNMP/1.png" alt="1"></p>
+</li>
+<li><p>检查Discuz! X3.2论坛系统的安装环境及目录权限 （必须确保状态都是可写！）</p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/LNMP/2.png" alt="2"></p>
+</li>
+<li><p>选择“全新安装Discuz! X（含UCenter Server）” </p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/LNMP/3.png" alt="3"></p>
+</li>
+<li><p>填写服务器的数据库信息与论坛系统管理员信息 </p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/LNMP/4.png" alt="4"></p>
+</li>
+<li><p>等待Discuz! X3.2论坛系统安装完毕 </p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/LNMP/5-1.png" alt="5-1"></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/LNMP/5-2.png" alt="5-2"></p>
+</li>
+<li><p>成功安装Discuz! X3.2论坛系统，欢迎界面</p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/LNMP/6.png" alt="6"></p>
+</li>
+</ol>
+<p>至此，整个LNMP架构搭建完成，同时也验证了其可用性。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/05/ssh/" rel="next" title="ssh">
+                <i class="fa fa-chevron-left"></i> ssh
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/21/栈Stack的认识/" rel="prev" title="栈Stack的认识">
+                栈Stack的认识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/zhi.jpg" alt="小智">
+            
+              <p class="site-author-name" itemprop="name">小智</p>
+              <div class="site-description motion-element" itemprop="description">Java,Linux,Mysql</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LNMP动态软件架构"><span class="nav-number">1.</span> <span class="nav-text">LNMP动态软件架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Yum软件仓库"><span class="nav-number">1.1.</span> <span class="nav-text">配置Yum软件仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置MySQL服务"><span class="nav-number">1.2.</span> <span class="nav-text">配置MySQL服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Nginx服务"><span class="nav-number">1.3.</span> <span class="nav-text">配置Nginx服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置PHP服务"><span class="nav-number">1.4.</span> <span class="nav-text">配置PHP服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搭建Discuz论坛"><span class="nav-number">2.</span> <span class="nav-text">搭建Discuz论坛</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小智</span>
+
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">1:44</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '4a3937b2ec1408fa593c',
+    clientSecret: 'bb11519c1d0aafd8540c58fe182487d24b1a1a6f',
+    repo: 'zengzhiLai.github.io',
+    owner: 'zengzhiLai',
+    admin: ['zengzhiLai'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+	<script type="text/javascript" src="js/schemes/clicklove.js"></script>

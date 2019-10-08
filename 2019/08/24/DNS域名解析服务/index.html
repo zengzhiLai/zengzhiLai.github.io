@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="DNS域名解析服务 DNS（Domain Name System，域名系统）  为了降低用户访问网络资源的门槛，DNS技术应运而生  简单来说，用户在浏览器中输入域名或IP地址时，DNS服务器将域名解析为IP地址（正向解析），或将IP地址解析为域名（反向解析），然后就可直接访问指定的网站了  DNS域名解析服务是一个分布式的数据库系统">
+<meta name="keywords" content="DNS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DNS域名解析服务">
+<meta property="og:url" content="https://lzz001.gitee.io/2019/08/24/DNS域名解析服务/index.html">
+<meta property="og:site_name" content="小智的博客">
+<meta property="og:description" content="DNS域名解析服务 DNS（Domain Name System，域名系统）  为了降低用户访问网络资源的门槛，DNS技术应运而生  简单来说，用户在浏览器中输入域名或IP地址时，DNS服务器将域名解析为IP地址（正向解析），或将IP地址解析为域名（反向解析），然后就可直接访问指定的网站了  DNS域名解析服务是一个分布式的数据库系统">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/DNS/Windows10%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8C%87%E5%AE%9ADNS%E6%9C%8D%E5%8A%A1%E5%99%A8.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/DNS/%E9%94%99%E8%AF%AFclocks%20are%20unsynchronized.png">
+<meta property="og:updated_time" content="2019-08-24T13:47:17.684Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DNS域名解析服务">
+<meta name="twitter:description" content="DNS域名解析服务 DNS（Domain Name System，域名系统）  为了降低用户访问网络资源的门槛，DNS技术应运而生  简单来说，用户在浏览器中输入域名或IP地址时，DNS服务器将域名解析为IP地址（正向解析），或将IP地址解析为域名（反向解析），然后就可直接访问指定的网站了  DNS域名解析服务是一个分布式的数据库系统">
+<meta name="twitter:image" content="https://gitee.com/lzz001/img/raw/master/DNS/Windows10%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8C%87%E5%AE%9ADNS%E6%9C%8D%E5%8A%A1%E5%99%A8.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://lzz001.gitee.io/2019/08/24/DNS域名解析服务/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>DNS域名解析服务 | 小智的博客</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?297412c3c8589eb0dc190e2d81f12097";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/zengzhiLai" target="_blank" class="github-corner" aria-label="View source on GitHub">
+		<svg width="100" height="100" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+			<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+			<path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+		</svg>
+	</a>
+	<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小智的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">慢即是快</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lzz001.gitee.io/2019/08/24/DNS域名解析服务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小智">
+      <meta itemprop="description" content="Java,Linux,Mysql">
+      <meta itemprop="image" content="/images/zhi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小智的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DNS域名解析服务
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-24 21:34:05 / 修改时间：21:47:17" itemprop="dateCreated datePublished" datetime="2019-08-24T21:34:05+08:00">2019-08-24</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="DNS域名解析服务"><a href="#DNS域名解析服务" class="headerlink" title="DNS域名解析服务"></a>DNS域名解析服务</h2><ul>
+<li><p>DNS（Domain Name System，域名系统）</p>
+</li>
+<li><p>为了降低用户访问网络资源的门槛，DNS技术应运而生</p>
+</li>
+<li><p>简单来说，用户在浏览器中输入域名或IP地址时，DNS服务器将域名解析为IP地址（正向解析），或将IP地址解析为域名（反向解析），然后就可直接访问指定的网站了</p>
+</li>
+<li><p>DNS域名解析服务是一个<strong>分布式</strong>的数据库系统</p>
+</li>
+</ul>
+<a id="more"></a>
+
+<ul>
+<li><p>域名后缀一般分为国际域名和国内域名。原则上域名后缀都有严格的定义，但在实际使用时可不必严格遵守</p>
+</li>
+<li><p><strong>.com</strong>（商业组织）、<strong>.org</strong>（非营利组织）、<strong>.gov</strong>（政府部门）、<strong>.net</strong>（网络服务商）、<strong>.edu</strong>（教研机构）、<strong>.pub</strong>（公共大众）、<strong>.cn</strong>（中国国家顶级域名）</p>
+</li>
+<li><p>由于全球庞大的请求数量无法被某一台服务器全部处理掉，DNS提供了三种类型的服务器：</p>
+<blockquote>
+<p><strong>主服务器</strong>：在特定区域内具有唯一性，负责维护该区域内的域名与IP地址之间的对应关系</p>
+<p><strong>从服务器</strong>：从主服务器中获得域名与IP地址的对应关系并进行维护，以防主服务器宕机等情况</p>
+<p><strong>缓存服务器</strong>：通过向其他域名解析服务器查询获得域名与IP地址的对应关系，并将经常查询的域名信息保存到服务器本地，以此来提高重复查询时的效率</p>
+</blockquote>
+</li>
+<li><p>主服务器是用于管理域名和IP地址对应关系的真正服务器；<br>从服务器的数据来源于主服务器，分散部署在各个国省市区，以便让用户就近查询域名，从而减轻主服务器的负载压力；<br>缓存服务器不太常用，一般部署在企业内网的网关位置，用于加速用户的域名查询请求</p>
+</li>
+<li><p>DNS域名解析服务采用分布式的数据结构来存放海量的“区域数据”信息，在执行用户发起的域名查询请求时，具有递归查询和迭代查询两种方式</p>
+</li>
+<li><p><strong>递归查询</strong>是指DNS服务器在收到用户发起的请求时，必须向用户返回一个准确的查询结果。如果DNS服务器本地没有存储与之对应的信息，则该服务器需要询问其他服务器，并将返回的查询结果提交给用户</p>
+</li>
+<li><p><strong>迭代查询</strong>是指DNS服务器在收到用户发起的请求时，并不直接回复查询结果，而是告诉另一台DNS服务器的地址，用户再向这台DNS服务器提交请求，这样依次反复，直到返回查询结果</p>
+</li>
+<li><p>域名解析服务是互联网基础设施中重要的一环，几乎所有的网络应用都依赖于DNS才能正常运行</p>
+</li>
+</ul>
+<h2 id="安装Bind服务程序"><a href="#安装Bind服务程序" class="headerlink" title="安装Bind服务程序"></a>安装Bind服务程序</h2><ul>
+<li>BIND（Berkeley Internet Name Domain，伯克利因特网名称域）服务是全球范围内使用最广泛、最安全可靠且高效的域名解析服务程序</li>
+<li>在生产环境中安装部署bind服务程序时加上chroot（俗称牢笼机制）扩展包，可有效地限制bind服务程序，使其仅能对自身的配置文件进行操作，确保整个服务器的安全</li>
+<li>在Linux系统中，bind服务程序的名称是named</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> yum install -y bind-chroot</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>主配置文件（/etc/named.conf）：文件中的参数用来定义bind服务程序的运行</p>
+<p>区域配置文件（/etc/named.rfc1912.zones）：用来保存域名和IP地址对应关系的所在位置。类似于图书的目录，对应着每个域和相应IP地址所在的具体位置，当需要查看或修改时，可根据这个位置找到相关文件</p>
+<p>数据配置文件目录（/var/named）：该目录用来保存域名和IP地址真实对应关系的数据配置文件</p>
+</blockquote>
+<p><strong>修改主配置文件，将第11行和第17行的地址均修改为any</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/named.conf</span><br><span class="line">  1 //</span><br><span class="line">  2 // named.conf</span><br><span class="line">  3 //</span><br><span class="line">  4 // Provided by Red Hat bind package to configure the ISC BIND named(8) DNS</span><br><span class="line">  5 // server as a caching only nameserver (as a localhost DNS resolver only).</span><br><span class="line">  6 //</span><br><span class="line">  7 // See /usr/share/doc/bind*/sample/ for example named configuration files.</span><br><span class="line">  8 //</span><br><span class="line">  9 </span><br><span class="line"> 10 options &#123;</span><br><span class="line"> 11         listen-on port 53 &#123; any; &#125;; # 服务器上的所有IP地址均可提供DNS域名解析服务</span><br><span class="line"> 12         listen-on-v6 port 53 &#123; ::1; &#125;;</span><br><span class="line"> 13         directory       "/var/named";</span><br><span class="line"> 14         dump-file       "/var/named/data/cache_dump.db";</span><br><span class="line"> 15         statistics-file "/var/named/data/named_stats.txt";</span><br><span class="line"> 16         memstatistics-file "/var/named/data/named_mem_stats.txt";</span><br><span class="line"> 17         allow-query     &#123; any; &#125;; # 允许所有人对本地服务器发送DNS查询请求</span><br><span class="line"> 18 </span><br><span class="line"> 19         /* </span><br><span class="line"> 20          - If you are building an AUTHORITATIVE DNS server, do NOT enable recursion.</span><br><span class="line"> 21          - If you are building a RECURSIVE (caching) DNS server, you need to enable </span><br><span class="line"> 22            recursion. </span><br><span class="line"> 23          - If your recursive DNS server has a public IP address, you MUST enable access </span><br><span class="line"> 24            control to limit queries to your legitimate users. Failing to do so will</span><br><span class="line"> 25            cause your server to become part of large scale DNS amplification </span><br><span class="line"> 26            attacks. Implementing BCP38 within your network would greatly</span><br><span class="line"> 27            reduce such attack surface </span><br><span class="line"> 28         */</span><br><span class="line"> 29         recursion yes;</span><br><span class="line"> 30 </span><br><span class="line"> 31         dnssec-enable yes;</span><br><span class="line"> 32         dnssec-validation yes;</span><br><span class="line"> 33         dnssec-lookaside auto;</span><br><span class="line"> 34 </span><br><span class="line"> 35         /* Path to ISC DLV key */</span><br><span class="line"> 36         bindkeys-file "/etc/named.iscdlv.key";</span><br><span class="line"> 37 </span><br><span class="line"> 38         managed-keys-directory "/var/named/dynamic";</span><br><span class="line"> 39 </span><br><span class="line"> 40         pid-file "/run/named/named.pid";</span><br><span class="line"> 41         session-keyfile "/run/named/session.key";</span><br><span class="line"> 42 &#125;;</span><br><span class="line"> 43 </span><br><span class="line"> 44 logging &#123;</span><br><span class="line"> 45         channel default_debug &#123;</span><br><span class="line"> 46                 file "data/named.run";</span><br><span class="line"> 47                 severity dynamic;</span><br><span class="line"> 48         &#125;;</span><br><span class="line"> 49 &#125;;</span><br><span class="line"> 50 </span><br><span class="line"> 51 zone "." IN &#123;</span><br><span class="line"> 52         type hint;</span><br><span class="line"> 53         file "named.ca";</span><br><span class="line"> 54 &#125;;</span><br><span class="line"> 55 </span><br><span class="line"> 56 include "/etc/named.rfc1912.zones";</span><br><span class="line"> 57 include "/etc/named.root.key";</span><br><span class="line"> 58</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>服务类型有三种，分别为hint（根区域）、master（主区域）、slave（辅助区域），其中常用的master和slave指的就是主服务器和从服务器</p>
+</li>
+<li><p>配置文件的参数写错，可执行<code>named-checkconf</code>命令检查<strong>主配置文件</strong>语法或参数的错误；<code>named-checkzone</code>命令检查<strong>数据配置文件</strong>语法或参数的错误</p>
+</li>
+</ul>
+<h2 id="正向解析——域名→IP"><a href="#正向解析——域名→IP" class="headerlink" title="正向解析——域名→IP"></a>正向解析——域名→IP</h2><ol>
+<li><p><strong>编辑区域配置文件：在文件最下面添加信息</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/named.rfc1912.zones</span><br><span class="line">......</span><br><span class="line">zone "zengzhilai.com" IN &#123;</span><br><span class="line">        type master; # 服务类型</span><br><span class="line">        file "zengzhilai.com.zone"; # 域名与IP地址规则保存的文件位置</span><br><span class="line">        allow-update&#123;none;&#125;; # 允许哪些客户机动态更新解析信息</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>编辑数据配置文件：复制一份正向解析的模板文件（named.localhost），然后编辑数据配置文件，配置完成重启named服务</strong><br> <code>cp</code>的-a参数：保留原始文件的所有者、所属组、权限属性等信息，以便让bind服务程序顺利读取文件内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /var/named</span><br><span class="line"><span class="meta">#</span> ls -al named.localhost </span><br><span class="line">-rw-r-----. 1 root named 152 Jun 21  2007 named.localhost</span><br><span class="line"><span class="meta">#</span> cp -a named.localhost zengzhilai.com.zone</span><br><span class="line"><span class="meta">#</span> ls</span><br><span class="line">chroot  dynamic   named.empty      named.loopback  zengzhilai.com.zone</span><br><span class="line">data    named.ca  named.localhost  slaves</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim zengzhilai.com.zone</span><br><span class="line"><span class="meta">$</span>TTL 1D</span><br><span class="line">@       IN SOA          zengzhilai.com.   root.zengzhilai.com. (</span><br><span class="line">       #授权信息开始     #DNS区域的地址      #域名管理员的邮箱(不要用@符合)</span><br><span class="line">                                        0       ; serial #更新序列号</span><br><span class="line">                                        1D      ; refresh #更新时间</span><br><span class="line">                                        1H      ; retry #重试延时</span><br><span class="line">                                        1W      ; expire #失效时间</span><br><span class="line">                                        3H )    ; minimum #无效解析记录的缓存时间</span><br><span class="line">        NS              ns.zengzhilai.com.      #域名服务器记录</span><br><span class="line">ns      IN A            192.168.40.131          #地址记录(ns.zengzhilai.com.)</span><br><span class="line">        IN MX 10        mail.zengzhilai.com.    #邮箱交换记录</span><br><span class="line">mail    IN A            192.168.40.131          #地址记录(mail.linuxprobe.com.)</span><br><span class="line">www     IN A            192.168.40.131          #地址记录(www.linuxprobe.com.)</span><br><span class="line">bbs     IN A            192.168.40.131          #地址记录(bbs.linuxprobe.com.)</span><br><span class="line"><span class="meta">#</span> systemctl restart named</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>关闭防火墙或开放53号端口，以便外网访问</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> systemctl stop iptables</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Linux本机作客户端，检验解析结果</strong>：</p>
+<p>Linux中指定DNS服务器，重启网卡后失效（恢复原样）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/resolv.conf</span><br><span class="line">nameserver 192.168.40.131</span><br></pre></td></tr></table></figure>
+
+<p><code>nslookup</code>命令检测能否从DNS服务器中查询到域名与IP地址的解析记录，可更准确地检验DNS服务器是否已经能够为用户提供服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> nslookup</span><br><span class="line"><span class="meta">&gt;</span> www.zengzhilai.com</span><br><span class="line">Server:		192.168.40.131</span><br><span class="line">Address:	192.168.40.131#53</span><br><span class="line"></span><br><span class="line">Name:	www.zengzhilai.com</span><br><span class="line">Address: 192.168.40.131</span><br><span class="line"><span class="meta">&gt;</span> bbs.zengzhilai.com</span><br><span class="line">Server:		192.168.40.131</span><br><span class="line">Address:	192.168.40.131#53</span><br><span class="line"></span><br><span class="line">Name:	bbs.zengzhilai.com</span><br><span class="line">Address: 192.168.40.131</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Windows10作客户端，检验解析结果</strong></p>
+<p>Windows10客户端指定DNS服务器<img src="https://gitee.com/lzz001/img/raw/master/DNS/Windows10%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8C%87%E5%AE%9ADNS%E6%9C%8D%E5%8A%A1%E5%99%A8.png" alt="Windows10客户端指定DNS服务器">在cmd中用ping命令查询检测</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\赖增智&gt;ping www.zengzhilai.com</span><br><span class="line"></span><br><span class="line">正在 Ping www.zengzhilai.com [192.168.40.131] 具有 32 字节的数据:</span><br><span class="line">来自 192.168.40.131 的回复: 字节=32 时间&lt;1ms TTL=64</span><br><span class="line">来自 192.168.40.131 的回复: 字节=32 时间&lt;1ms TTL=64</span><br><span class="line">来自 192.168.40.131 的回复: 字节=32 时间&lt;1ms TTL=64</span><br><span class="line">来自 192.168.40.131 的回复: 字节=32 时间&lt;1ms TTL=64</span><br><span class="line"></span><br><span class="line">192.168.40.131 的 Ping 统计信息:</span><br><span class="line">    数据包: 已发送 = 4，已接收 = 4，丢失 = 0 (0% 丢失)，</span><br><span class="line">往返行程的估计时间(以毫秒为单位):</span><br><span class="line">    最短 = 0ms，最长 = 0ms，平均 = 0ms</span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ol>
+<h2 id="反向域名——IP→域名"><a href="#反向域名——IP→域名" class="headerlink" title="反向域名——IP→域名"></a>反向域名——IP→域名</h2><ul>
+<li>反向解析一般用于对某个IP地址上绑定的所有域名进行整体屏蔽，屏蔽有某些域名发送的垃圾邮件</li>
+<li>反向解析也可针对某个IP地址进行反向解析，大致判断有多少个网站在上面运行</li>
+<li>当购买虚拟主机时，可使用这一功能验证虚拟主机提供商是否有严重的超售问题</li>
+</ul>
+<ol>
+<li><p><strong>编辑区域配置文件：在正向解析参数后添加反向解析参数</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/named.rfc1912.zones</span><br><span class="line">......</span><br><span class="line">zone "zengzhilai.com" IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file "zengzhilai.com.zone";</span><br><span class="line">        allow-update&#123;none;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">zone "40.168.192.in-addr.arpa" IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file "192.168.40.arpa";</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>编辑数据配置文件：从目录/var/named复制一份反向解析模板文件（named.loopback），然后填写参数，重启named服务</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /var/named</span><br><span class="line"><span class="meta">#</span> cp -a named.loopback 192.168.40.arpa</span><br><span class="line"><span class="meta">#</span> vim 192.168.40.arpa</span><br><span class="line"><span class="meta">$</span>TTL 1D</span><br><span class="line">@       IN SOA  zengzhilai.com.  root.zengzhilai.com. (</span><br><span class="line">                                        0       ; serial</span><br><span class="line">                                        1D      ; refresh</span><br><span class="line">                                        1H      ; retry</span><br><span class="line">                                        1W      ; expire</span><br><span class="line">                                        3H )    ; minimum</span><br><span class="line">        NS      ns.zengzhilai.com.</span><br><span class="line">ns      A       192.168.40.131</span><br><span class="line">131     PTR     ns.zengzhilai.com.     #PTR为指针记录，仅用于反向解析中</span><br><span class="line">131     PTR     mail.zengzhilai.com.</span><br><span class="line">131     PTR     www.zengzhilai.com.</span><br><span class="line">132     PTR     bbs.zengzhilai.com.</span><br><span class="line"><span class="meta">#</span> systemctl restart named</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Linux本机作客户端，检验解析结果</strong></p>
+<p>在正向解析中指定了DNS服务器（重启网卡恢复原样），此处不需要再指定</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> nslookup</span><br><span class="line"><span class="meta">&gt;</span> 192.168.40.131</span><br><span class="line">Server:		192.168.40.131</span><br><span class="line">Address:	192.168.40.131#53</span><br><span class="line"></span><br><span class="line">131.40.168.192.in-addr.arpa	name = mail.zengzhilai.com.</span><br><span class="line">131.40.168.192.in-addr.arpa	name = www.zengzhilai.com.</span><br><span class="line">131.40.168.192.in-addr.arpa	name = ns.zengzhilai.com.</span><br><span class="line"><span class="meta">&gt;</span> 192.168.40.141</span><br><span class="line">Server:		192.168.40.131</span><br><span class="line">Address:	192.168.40.131#53</span><br><span class="line"></span><br><span class="line">141.40.168.192.in-addr.arpa	name = bbs.zengzhilai.com.</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="部署从服务器"><a href="#部署从服务器" class="headerlink" title="部署从服务器"></a>部署从服务器</h2><p>主服务器与从服务器分别使用的操作系统与IP地址信息：（<code>/etc/redhat-release</code>文件可查看当前系统版本的详细信息）</p>
+<table>
+<thead>
+<tr>
+<th>主机名称</th>
+<th>操作系统</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主服务器</td>
+<td>RHEL7.0</td>
+<td>192.168.40.131</td>
+</tr>
+<tr>
+<td>从服务器</td>
+<td>RHEL6.8</td>
+<td>192.168.40.123</td>
+</tr>
+</tbody></table>
+<ol>
+<li><p><strong>清空主服务器已有的防火墙规则链，以防影响实验</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> iptables -F</span><br><span class="line"><span class="meta">#</span> iptables -L</span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination </span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>修改 主服务器 的区域配置文件：允许该从服务器的更新请求，即修改allow-update 参数，然后重启named服务</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/named.rfc1912.zones</span><br><span class="line">......</span><br><span class="line">zone "zengzhilai.com" IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file "zengzhilai.com.zone";</span><br><span class="line">        allow-update&#123; 192.168.40.123; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">zone "40.168.192.in-addr.arpa" IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file "192.168.40.arpa";</span><br><span class="line">        allow-update&#123; 192.168.40.123; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#</span> systemctl restart named</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>在 从服务器 中填写主服务器的IP地址与要抓取的区域信息，然后重启named服务</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/named.rfc1912.zones</span><br><span class="line">......</span><br><span class="line">zone "zengzhilai.com" IN &#123;</span><br><span class="line">        type slave; #服务类型是slave(从)</span><br><span class="line">        masters &#123; 192.168.40.131; &#125;; #主服务器的IP地址</span><br><span class="line">        file "slaves/zengzhilai.com.zone";#同步数据配置文件后要保存到的位置，在/var/named目录</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">zone "40.168.192.in-addr.arpa" IN &#123;</span><br><span class="line">        type slave;</span><br><span class="line">        masters &#123; 192.168.40.131; &#125;;</span><br><span class="line">        file "slaves/192.168.40.arpa";</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#</span> service named restart</span><br><span class="line">停止 named：                                               [确定]</span><br><span class="line">启动 named：                                               [确定]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>检验解析结果</strong></p>
+<p>查看自动从主服务器上同步的数据配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> ls /var/named/slaves</span><br><span class="line">192.168.40.arpa  zengzhilai.com.zone</span><br></pre></td></tr></table></figure>
+
+<p>指定从服务器的DNS服务器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/resolv.conf</span><br><span class="line">nameserver 192.168.40.123</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> nslookup</span><br><span class="line"><span class="meta">&gt;</span> www.zengzhilai.com</span><br><span class="line">Server:		192.168.40.123</span><br><span class="line">Address:	192.168.40.123#53</span><br><span class="line"></span><br><span class="line">Name:	www.zengzhilai.com</span><br><span class="line">Address: 192.168.40.131</span><br><span class="line"><span class="meta">&gt;</span> 192.168.40.131</span><br><span class="line">Server:		192.168.40.123</span><br><span class="line">Address:	192.168.40.123#53</span><br><span class="line"></span><br><span class="line">131.40.168.192.in-addr.arpa	name = mail.zengzhilai.com.</span><br><span class="line">131.40.168.192.in-addr.arpa	name = www.zengzhilai.com.</span><br><span class="line">131.40.168.192.in-addr.arpa	name = ns.zengzhilai.com.</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="安全的加密传输"><a href="#安全的加密传输" class="headerlink" title="安全的加密传输"></a>安全的加密传输</h3><blockquote>
+<ul>
+<li><p>互联网中的绝大多数DNS服务器（超过95%）都是基于BIND域名解析服务搭建的，而bind服务程序为了提供安全的解析服务，已经对TSIG（RFC 2845）加密机制提供了支持</p>
+</li>
+<li><p>TSIG主要是利用了密码编码的方式来保护区域信息的传输（Zone Transfer），即TSIG加密机制保证了DNS服务器之间传输域名区域信息的安全性</p>
+</li>
+</ul>
+</blockquote>
+<p>接上面的实验，同样使用这两台服务器：</p>
+<table>
+<thead>
+<tr>
+<th>主机名称</th>
+<th>操作系统</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主服务器</td>
+<td>RHEL7.0</td>
+<td>192.168.40.131</td>
+</tr>
+<tr>
+<td>从服务器</td>
+<td>RHEL6.8</td>
+<td>192.168.40.123</td>
+</tr>
+</tbody></table>
+<ol>
+<li><p><strong>删除从服务器获取到的数据配置文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> ls -l /var/named/slaves/</span><br><span class="line">总用量 8</span><br><span class="line">-rw-r--r-- 1 named named 456 8月  22 11:27 192.168.40.arpa</span><br><span class="line">-rw-r--r-- 1 named named 409 8月  22 11:27 zengzhilai.com.zone</span><br><span class="line"><span class="meta">#</span> rm -rf /var/named/slaves/*</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>在主服务器生成密钥：用<code>dnssec-keygen [参数]</code>命令生成安全的DNS服务密钥</strong></p>
+<p>生成一个主机名称为master-slave的128位HMAC-MD5算法的密钥文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> dnssec-keygen -a HMAC-MD5 -b 128 -n HOST master-slave</span><br><span class="line">Kmaster-slave.+157+31244</span><br><span class="line"><span class="meta">#</span> ls -al Kmaster-slave.+157+31244.*</span><br><span class="line">-rw-------. 1 root root  56 Aug 22 19:35 Kmaster-slave.+157+31244.key</span><br><span class="line">-rw-------. 1 root root 165 Aug 22 19:35 Kmaster-slave.+157+31244.private</span><br><span class="line"><span class="meta">#</span> cat Kmaster-slave.+157+31244.private </span><br><span class="line">Private-key-format: v1.3</span><br><span class="line">Algorithm: 157 (HMAC_MD5)</span><br><span class="line">Key: GGdhTVxB0keBPsMZpRLixg==</span><br><span class="line">Bits: AAA=</span><br><span class="line">Created: 20190822113520</span><br><span class="line">Publish: 20190822113520</span><br><span class="line">Activate: 20190822113520</span><br></pre></td></tr></table></figure>
+
+<p><code>dnssec-keygen</code>命令的参数说明:</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-a</td>
+<td>指定加密算法，包括RSAMD5（RSA）、RSASHA1、DSA、NSEC3RSASHA1、NSEC3DSA等</td>
+</tr>
+<tr>
+<td>-b</td>
+<td>密钥长度（HMAC-MD5的密钥长度在1~512位之间）</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>密钥的类型（HOST表示与主机相关）</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>在主服务器中创建密钥验证文件tansfer.key，并将密钥名称、加密算法和私钥加密字符串写入传输配置文件</strong></p>
+<p>为安全起见，将文件所属组修改成named，并将文件权限设置得要小一点，且硬链接到/etc目录中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /var/named/chroot/etc/</span><br><span class="line"><span class="meta">#</span> vim transfer.key</span><br><span class="line">key "master-slave" &#123;</span><br><span class="line">        algorithm hmac-md5;</span><br><span class="line">        secret "GGdhTVxB0keBPsMZpRLixg==";</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#</span> chown root:named transfer.key </span><br><span class="line"><span class="meta">#</span> chmod 640 transfer.key </span><br><span class="line"><span class="meta">#</span> ln transfer.key /etc/transfer.key</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>主服务器开启并加载Bind服务的密钥验证功能</strong></p>
+<p>修改主服务器的主配置文件的2行，重启named服务：</p>
+<p>第18行：只允许带有master-slave密钥认证的DNS服务器同步数据配置文件<br>第58行：加载密钥验证文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/named.conf</span><br><span class="line">......</span><br><span class="line"> 10 options &#123;</span><br><span class="line"> 11         listen-on port 53 &#123; any; &#125;;</span><br><span class="line"> 12         listen-on-v6 port 53 &#123; ::1; &#125;;</span><br><span class="line"> 13         directory       "/var/named";</span><br><span class="line"> 14         dump-file       "/var/named/data/cache_dump.db";</span><br><span class="line"> 15         statistics-file "/var/named/data/named_stats.txt";</span><br><span class="line"> 16         memstatistics-file "/var/named/data/named_mem_stats.txt";</span><br><span class="line"> 17         allow-query     &#123; any; &#125;;</span><br><span class="line"> 18         allow-transfer &#123; key master-slave; &#125;;</span><br><span class="line">......</span><br><span class="line"> 55 </span><br><span class="line"> 56 include "/etc/named.rfc1912.zones";</span><br><span class="line"> 57 include "/etc/named.root.key";</span><br><span class="line"> 58 include "/etc/transfer.key";</span><br><span class="line"><span class="meta">#</span> systemctl restart named</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<p>   至此，DNS主服务器的TSIG密钥加密传输功能就已经配置完成</p>
+<p>   重启从服务器的bind服务程序，发现已不能再自动获取到数据配置文件了</p>
+<ol start="5">
+<li><p><strong>配置从服务器，使其支持密钥验证（与主服务器配置相似）</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> cd /var/named/chroot/etc/</span><br><span class="line"><span class="meta">#</span> vim transfer.key</span><br><span class="line">key "master-slave" &#123;</span><br><span class="line">	algorithm hmac-md5;</span><br><span class="line">	secret "GGdhTVxB0keBPsMZpRLixg==";</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#</span> chown root:named transfer.key </span><br><span class="line"><span class="meta">#</span> chmod 640 transfer.key </span><br><span class="line"><span class="meta">#</span> ln transfer.key /etc/transfer.key</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>从服务器开启并加载从服务器的密钥验证功能</strong></p>
+<p>修改从服务器的主配置文件的2行，重启named服务：</p>
+<p>第9行：加载密钥验证文件<br>第40~42行：主服务器的IP地址和密钥名称</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/named.conf</span><br><span class="line">......</span><br><span class="line">  9 include "/etc/transfer.key";</span><br><span class="line"> 10 options &#123;</span><br><span class="line"> 11         listen-on port 53 &#123; any; &#125;; </span><br><span class="line"> 12         listen-on-v6 port 53 &#123; ::1; &#125;;</span><br><span class="line"> 13         directory       "/var/named";</span><br><span class="line"> 14         dump-file       "/var/named/data/cache_dump.db";</span><br><span class="line"> 15         statistics-file "/var/named/data/named_stats.txt";</span><br><span class="line"> 16         memstatistics-file "/var/named/data/named_mem_stats.txt";</span><br><span class="line"> 17         allow-query     &#123; any; &#125;;</span><br><span class="line"> 18         recursion yes;</span><br><span class="line"> 19         </span><br><span class="line"> 20         dnssec-enable yes;</span><br><span class="line"> 21         dnssec-validation yes;</span><br><span class="line"> 22         /* Path to ISC DLV key */</span><br><span class="line"> 23         bindkeys-file "/etc/named.iscdlv.key";</span><br><span class="line"> 24 </span><br><span class="line"> 25         managed-keys-directory "/var/named/dynamic";</span><br><span class="line"> 26 &#125;;</span><br><span class="line"> 27 </span><br><span class="line"> 28 logging &#123;</span><br><span class="line"> 29         channel default_debug &#123;</span><br><span class="line"> 30                 file "data/named.run";</span><br><span class="line"> 31                 severity dynamic;</span><br><span class="line"> 32         &#125;;</span><br><span class="line"> 33 &#125;;</span><br><span class="line"> 34 </span><br><span class="line"> 35 zone "." IN &#123;</span><br><span class="line"> 36         type hint;</span><br><span class="line"> 37         file "named.ca";</span><br><span class="line"> 38 &#125;;</span><br><span class="line"> 39 </span><br><span class="line"> 40 server 192.168.40.131 &#123;</span><br><span class="line"> 41         keys &#123; master-slave; &#125;;</span><br><span class="line"> 42 &#125;;</span><br><span class="line"> 43 </span><br><span class="line"> 44 include "/etc/named.rfc1912.zones";</span><br><span class="line"> 45 include "/etc/named.root.key";</span><br><span class="line"><span class="meta">#</span> service named restart</span><br><span class="line">停止 named：                                               [确定]</span><br><span class="line">启动 named：                                               [确定]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>DNS从服务器同步域名区域数据</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> ls /var/named/slaves/</span><br><span class="line">192.168.40.arpa  zengzhilai.com.zone</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p><strong>注意：</strong></p>
+<p>​        由于两台服务器的时间不一致导致出现了下面的错误：时钟不同步<code>clocks are unsynchronized</code>（<code>/var/log/message</code>文件可查看错误）：</p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/DNS/%E9%94%99%E8%AF%AFclocks%20are%20unsynchronized.png" alt="错误：&quot;clocks are unsynchronized&quot;"></p>
+<p>最简单的方法是：用<code>date</code>命令使服务器时间一致，例：<code>date -s &quot;2019/8/23/ 16:49&quot;</code></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/DNS/" rel="tag"># DNS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/14/队列Queue的认识/" rel="next" title="队列Queue的认识">
+                <i class="fa fa-chevron-left"></i> 队列Queue的认识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/01/防火墙之Iptables与Firewalld/" rel="prev" title="防火墙之Iptables与Firewalld">
+                防火墙之Iptables与Firewalld <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/zhi.jpg" alt="小智">
+            
+              <p class="site-author-name" itemprop="name">小智</p>
+              <div class="site-description motion-element" itemprop="description">Java,Linux,Mysql</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS域名解析服务"><span class="nav-number">1.</span> <span class="nav-text">DNS域名解析服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Bind服务程序"><span class="nav-number">2.</span> <span class="nav-text">安装Bind服务程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正向解析——域名→IP"><span class="nav-number">3.</span> <span class="nav-text">正向解析——域名→IP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反向域名——IP→域名"><span class="nav-number">4.</span> <span class="nav-text">反向域名——IP→域名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署从服务器"><span class="nav-number">5.</span> <span class="nav-text">部署从服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安全的加密传输"><span class="nav-number">5.1.</span> <span class="nav-text">安全的加密传输</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小智</span>
+
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">1:44</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '4a3937b2ec1408fa593c',
+    clientSecret: 'bb11519c1d0aafd8540c58fe182487d24b1a1a6f',
+    repo: 'zengzhiLai.github.io',
+    owner: 'zengzhiLai',
+    admin: ['zengzhiLai'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+	<script type="text/javascript" src="js/schemes/clicklove.js"></script>

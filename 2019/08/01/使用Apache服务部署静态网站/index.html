@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="WebServer Apache：目前拥有很高市场占有率的Web服务程序之一，其跨平台和安全性广泛被认可且拥有快速、可靠、简单的API扩展。可以运行在Linux系统、UNIX系统甚至是Windows系统中，支持基于IP、域名及端口号的虚拟主机功能，支持多种认证方式，集成有代理服务器模块、安全Socket层（SSL），能够实时监视服务状态与定制日志消息，并有着各类丰富的模块支持   Nginx： 一">
+<meta name="keywords" content="Apache,SElinux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Apache服务部署静态网站">
+<meta property="og:url" content="https://lzz001.gitee.io/2019/08/01/使用Apache服务部署静态网站/index.html">
+<meta property="og:site_name" content="小智的博客">
+<meta property="og:description" content="WebServer Apache：目前拥有很高市场占有率的Web服务程序之一，其跨平台和安全性广泛被认可且拥有快速、可靠、简单的API扩展。可以运行在Linux系统、UNIX系统甚至是Windows系统中，支持基于IP、域名及端口号的虚拟主机功能，支持多种认证方式，集成有代理服务器模块、安全Socket层（SSL），能够实时监视服务状态与定制日志消息，并有着各类丰富的模块支持   Nginx： 一">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Right%20page.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Forbidden.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/User%20Homepages.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Access%20Password%20Required.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Edit%20a%20connection.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Edit%20Ethernet.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Add%20IPv4%20Addresses.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/192.168.40.131.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/192.168.40.141.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/192.168.40.151.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/www.zengzhilai.com.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/bbs.zengzhilai.com.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/mail.zengzhilai.com.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/port6111.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/port6222.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Port%20Restricted.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Firefox%20Success.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Chrome%20Forbidden.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Chrome%20Forbidden.png">
+<meta property="og:image" content="https://gitee.com/lzz001/img/raw/master/Apache/IP%20Address%20Conform.png">
+<meta property="og:updated_time" content="2019-08-01T15:32:47.692Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Apache服务部署静态网站">
+<meta name="twitter:description" content="WebServer Apache：目前拥有很高市场占有率的Web服务程序之一，其跨平台和安全性广泛被认可且拥有快速、可靠、简单的API扩展。可以运行在Linux系统、UNIX系统甚至是Windows系统中，支持基于IP、域名及端口号的虚拟主机功能，支持多种认证方式，集成有代理服务器模块、安全Socket层（SSL），能够实时监视服务状态与定制日志消息，并有着各类丰富的模块支持   Nginx： 一">
+<meta name="twitter:image" content="https://gitee.com/lzz001/img/raw/master/Apache/Right%20page.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://lzz001.gitee.io/2019/08/01/使用Apache服务部署静态网站/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>使用Apache服务部署静态网站 | 小智的博客</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?297412c3c8589eb0dc190e2d81f12097";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/zengzhiLai" target="_blank" class="github-corner" aria-label="View source on GitHub">
+		<svg width="100" height="100" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+			<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+			<path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+		</svg>
+	</a>
+	<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小智的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">慢即是快</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lzz001.gitee.io/2019/08/01/使用Apache服务部署静态网站/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小智">
+      <meta itemprop="description" content="Java,Linux,Mysql">
+      <meta itemprop="image" content="/images/zhi.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小智的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用Apache服务部署静态网站
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-01 23:06:21 / 修改时间：23:32:47" itemprop="dateCreated datePublished" datetime="2019-08-01T23:06:21+08:00">2019-08-01</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="WebServer"><a href="#WebServer" class="headerlink" title="WebServer"></a>WebServer</h1><blockquote>
+<p><strong>Apache</strong>：目前拥有很高市场占有率的Web服务程序之一，其跨平台和安全性广泛被认可且拥有快速、可靠、简单的API扩展。可以运行在Linux系统、UNIX系统甚至是Windows系统中，支持基于IP、域名及端口号的虚拟主机功能，支持多种认证方式，集成有代理服务器模块、安全Socket层（SSL），能够实时监视服务状态与定制日志消息，并有着各类丰富的模块支持</p>
+</blockquote>
+<blockquote>
+<p><strong>Nginx</strong>： 一款由俄罗斯的程序设计师 Igor Sysoev 所开发高性能的Web和反向代理服务器，也是一个 IMAP/POP3/SMTP 代理服务器。在高连接并发的情况下，Nginx是Apache服务器不错的替代品。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>Windows10系统、VMware Workstation、Red Hat 7、Xshell 6、Chrome浏览器、Firefox浏览器</p>
+<h2 id="Apache安装"><a href="#Apache安装" class="headerlink" title="Apache安装"></a>Apache安装</h2><table>
+<thead>
+<tr>
+<th>解释</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>安装</td>
+<td><code>yum install httpd</code></td>
+</tr>
+<tr>
+<td>启动</td>
+<td><code>service httpd start</code>（<code>systemctl start httpd</code>）</td>
+</tr>
+<tr>
+<td>停止</td>
+<td><code>service httpd stop</code>（<code>systemctl stop httpd</code>）</td>
+</tr>
+<tr>
+<td>查询httpd进程是否存在</td>
+<td>`ps -ef</td>
+</tr>
+<tr>
+<td>网络统计，查看80端口是否启用</td>
+<td>`netstat -anpl</td>
+</tr>
+<tr>
+<td>关闭防火墙（开启80端口）</td>
+<td><code>service iptables stop</code>(<code>sytemctl stop iptables</code>)</td>
+</tr>
+<tr>
+<td>加入开机启动项</td>
+<td><code>chkconfig httpd on</code>（<code>systemctl enable httpd</code>）</td>
+</tr>
+<tr>
+<td>查看启动情况</td>
+<td><code>chkconfig --list httpd</code>(<code>systemctl is-enabled httpd</code>)</td>
+</tr>
+</tbody></table>
+<p>注：括号内为RedHat7的新命令</p>
+<h2 id="配置服务文件参数"><a href="#配置服务文件参数" class="headerlink" title="配置服务文件参数"></a>配置服务文件参数</h2><table>
+<thead>
+<tr>
+<th>配置文件</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/etc/httpd</td>
+<td>服务目录</td>
+</tr>
+<tr>
+<td><strong>/etc/httpd/conf/httpd.conf</strong></td>
+<td><strong>主配置文件</strong></td>
+</tr>
+<tr>
+<td>/var/www/html</td>
+<td>网站数据目录</td>
+</tr>
+<tr>
+<td>/var/log/httpd/access_log</td>
+<td>访问日志</td>
+</tr>
+<tr>
+<td>/var/log/httpd/error_log</td>
+<td>错误日志</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>主配置文件的参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ServerRoot</td>
+<td>服务目录</td>
+</tr>
+<tr>
+<td>ServerAdmin</td>
+<td>管理员邮箱</td>
+</tr>
+<tr>
+<td>User</td>
+<td>运行服务的用户</td>
+</tr>
+<tr>
+<td>Group</td>
+<td>运行服务的用户组</td>
+</tr>
+<tr>
+<td>ServerName</td>
+<td>网站服务器的域名</td>
+</tr>
+<tr>
+<td>DocumentRoot</td>
+<td>网站数据目录</td>
+</tr>
+<tr>
+<td>Listen</td>
+<td>监听的IP地址与端口号</td>
+</tr>
+<tr>
+<td>DirectoryIndex</td>
+<td>默认的索引页页面</td>
+</tr>
+<tr>
+<td>ErrorLog</td>
+<td>错误日志文件</td>
+</tr>
+<tr>
+<td>CustomLog</td>
+<td>访问日志文件</td>
+</tr>
+<tr>
+<td>Timeout</td>
+<td>网页超时时间</td>
+</tr>
+</tbody></table>
+<p><strong>1. 建立网站数据的保存目录并创建首页文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> mkdir -p /home/wwwroot</span><br><span class="line"><span class="meta">#</span> echo "The New Web Directory" &gt;&gt; /home/wwwroot/index.html</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 修改httpd服务程序的主配置文件</strong><br>   将DocumentRoot修改为/home/wwwroot<br>   将用于定义目录权限的参数Directory修改为/home/wwwroot</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/httpd/conf/httpd.conf</span><br><span class="line">......</span><br><span class="line">119 DocumentRoot "/home/wwwroot"</span><br><span class="line">120 </span><br><span class="line">121 #</span><br><span class="line">122 # Relax access to content within /var/www.</span><br><span class="line">123 #</span><br><span class="line">124 &lt;Directory "/home/wwwroot"&gt;</span><br><span class="line">125     AllowOverride None</span><br><span class="line">126     # Allow open access:</span><br><span class="line">127     Require all granted</span><br><span class="line">128 &lt;/Directory&gt;</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 修改SELinux当前的运行模式为禁用（0为禁用，1为启用),<font color="red">临时修改,系统重启后失效</font>，永久的方法看步骤5、6、7</strong><br>如果不修改则会报错：<code>Forbidden,You don&#39;t have permission to access /index.html on this server</code>.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> setenforce 0</span><br></pre></td></tr></table></figure>
+
+<p><strong>4. 刷新网页</strong></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/Right%20page.png" alt="正确的网页"></p>
+<h3 id="SELinux安全子系统"><a href="#SELinux安全子系统" class="headerlink" title="SELinux安全子系统"></a>SELinux安全子系统</h3><ul>
+<li>SELinux（Security-Enhanced Linux）</li>
+<li>美国国家安全局在Linux开源社区帮助下开发的一个强制访问控制的安全子系统</li>
+<li>目的是为了让各个服务进程都受到约束，使其仅获取到本应获取的资源</li>
+<li>对服务程序的功能进行限制（SELinux域限制可以确保服务程序做不了出格的事情）</li>
+<li>对文件资源的访问限制（SELinux安全上下文确保文件资源只能被其所属的服务程序进行访问）</li>
+<li>SELinux服务主配置文件是/etc/selinux/config</li>
+</ul>
+<h4 id="SELinux服务的三种配置模式"><a href="#SELinux服务的三种配置模式" class="headerlink" title="SELinux服务的三种配置模式"></a>SELinux服务的三种配置模式</h4><ul>
+<li><strong>enforcing</strong>：强制启用安全策略模式，将拦截服务的不合法请求</li>
+<li><strong>permissive</strong>：遇到服务越权访问时，只发出警告而不强制拦截</li>
+<li><strong>disabled</strong>：对于越权的行为不警告也不拦截</li>
+</ul>
+<h4 id="管理SELinux策略的命令semanage"><a href="#管理SELinux策略的命令semanage" class="headerlink" title="管理SELinux策略的命令semanage"></a>管理SELinux策略的命令<code>semanage</code></h4><p>​    SELinux服务极大地提升了Linux系统的安全性，将用户权限牢牢地锁在笼子里。<code>semanage</code>命令不仅能够像传统<code>chcon</code>命令那样——设置文件、目录的策略，还可以管理网络端口、消息接口。其格式为“<code>semanage [选项] [文件]</code>“：</p>
+<table>
+<thead>
+<tr>
+<th><code>semanage</code>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-l</td>
+<td>用于查询</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>用于添加</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>用于修改</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>用于删除</td>
+</tr>
+</tbody></table>
+<p><code>getenforce</code>命令获取当前SELinux服务的运行模式</p>
+<p><strong>5. 查看原始网站数据的保存目录与当前网站数据的保存目录是否拥有不同的SELinux安全上下文值</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> setenforce 1</span><br><span class="line"><span class="meta">#</span> ls -Zd /var/www/html</span><br><span class="line">drwxr-xr-x. root root system_u:object_r:httpd_sys_content_t:s0 /var/www/html</span><br><span class="line"><span class="meta">#</span> ls -Zd /home/wwwroot</span><br><span class="line">drwxr-xr-x. root root unconfined_u:object_r:home_root_t:s0 /home/wwwroot</span><br></pre></td></tr></table></figure>
+
+<p>注：<br>用户段system_u代表系统进程的身份<br>角色段object_r代表文件目录的角色<br>类型段httpd_sys_content_t代表网站服务的系统文件</p>
+<p><strong>6. 向/home/wwwroot目录新添加一条SELinux安全上下文，使目录本身及目录里的所有文件都能被httpd访问</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> semanage fcontext -a -t httpd_sys_content_t /home/wwwroot</span><br><span class="line"><span class="meta">#</span> semanage fcontext -a -t httpd_sys_content_t /home/wwwroot/*</span><br></pre></td></tr></table></figure>
+
+<p><strong>7. 使用<code>restorecon</code>命令将设置好的SELinux安全上下文立即生效，-Rv参数对指定的目录进行递归操作，并显示SELinux安全上下文的修改过程</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> restorecon -Rv /home/wwwroot/</span><br><span class="line">restorecon reset /home/wwwroot context unconfined_u:object_r:home_root_t:s0-&gt;unconfined_u:object_r:httpd_sys_content_t:s0</span><br><span class="line">restorecon reset /home/wwwroot/index.html context unconfined_u:object_r:home_root_t:s0-&gt;unconfined_u:object_r:httpd_sys_content_t:s0</span><br></pre></td></tr></table></figure>
+
+<h2 id="个人用户主页功能"><a href="#个人用户主页功能" class="headerlink" title="个人用户主页功能"></a>个人用户主页功能</h2><h3 id="简单的个人用户主页"><a href="#简单的个人用户主页" class="headerlink" title="简单的个人用户主页"></a>简单的个人用户主页</h3><p><strong>1. 开启个人用户主页功能</strong><br>将第17行的UserDir disabled参数注释（加#），表示让httpd服务程序开启个人用户主页功能<br>将第24行的UserDir public_html参数的注释去掉（UserDir参数表示网站数据在用户家目录中的保存目录名称，即public_html目录）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vim /etc/httpd/conf.d/userdir.conf</span><br><span class="line">  1 #</span><br><span class="line">  2 # UserDir: The name of the directory that is appended onto a user's home</span><br><span class="line">  3 # directory if a ~user request is received.</span><br><span class="line">  4 #</span><br><span class="line">  5 # The path to the end user account 'public_html' directory must be</span><br><span class="line">  6 # accessible to the webserver userid.  This usually means that ~userid</span><br><span class="line">  7 # must have permissions of 711, ~userid/public_html must have permissions</span><br><span class="line">  8 # of 755, and documents contained therein must be world-readable.</span><br><span class="line">  9 # Otherwise, the client will only receive a "403 Forbidden" message.</span><br><span class="line"> 10 #</span><br><span class="line"> 11 &lt;IfModule mod_userdir.c&gt;</span><br><span class="line"> 12     #</span><br><span class="line"> 13     # UserDir is disabled by default since it can confirm the presence</span><br><span class="line"> 14     # of a username on the system (depending on home directory</span><br><span class="line"> 15     # permissions).</span><br><span class="line"> 16     #</span><br><span class="line"> 17     #UserDir disabled</span><br><span class="line"> 18 </span><br><span class="line"> 19     #</span><br><span class="line"> 20     # To enable requests to /~user/ to serve the user's public_html</span><br><span class="line"> 21     # directory, remove the "UserDir disabled" line above, and uncomment</span><br><span class="line"> 22     # the following line instead:</span><br><span class="line"> 23     # </span><br><span class="line"> 24     UserDir public_html</span><br><span class="line"> 25 &lt;/IfModule&gt;</span><br><span class="line"> 26 </span><br><span class="line"> 27 #</span><br><span class="line"> 28 # Control access to UserDir directories.  The following is an example</span><br><span class="line"> 29 # for a site where these directories are restricted to read-only.</span><br><span class="line"> 30 #</span><br><span class="line"> 31 &lt;Directory "/home/*/public_html"&gt;</span><br><span class="line"> 32     AllowOverride FileInfo AuthConfig Limit Indexes</span><br><span class="line"> 33     Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec</span><br><span class="line"> 34     Require method GET POST OPTIONS</span><br><span class="line"> 35 &lt;/Directory&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 在用户家目录中建立用于保存网站数据的目录及首页面文件并将家目录的权限修改为755，保证其他人也有权限读取里面的内容</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># su - yanji</span></span><br><span class="line">Last login: Tue Apr 16 18:17:42 CST 2019 from 192.168.40.1 on pts/1</span><br><span class="line">$ mkdir public_html</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"This is yanji's website"</span> &gt; public_html/index.html</span><br><span class="line">$ chmod -Rf 755 /home/yanji</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 重启httpd服务，浏览器访问，地址为：网址/~用户名，出现Forbidden页面</strong></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/Forbidden.png" alt="禁止访问用户的个人网站"></p>
+<p><strong>4. 查询并过滤出所有与HTTP协议相关的安全策略。其中，off为禁止状态，on为允许状态</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> getsebool -a | grep http</span></span><br><span class="line">httpd_anon_write --&gt; off</span><br><span class="line">httpd_builtin_scripting --&gt; on</span><br><span class="line">httpd_can_check_spam --&gt; off</span><br><span class="line">httpd_can_connect_ftp --&gt; off</span><br><span class="line">httpd_can_connect_ldap --&gt; off</span><br><span class="line">httpd_can_connect_mythtv --&gt; off</span><br><span class="line">httpd_can_connect_zabbix --&gt; off</span><br><span class="line">httpd_can_network_connect --&gt; off</span><br><span class="line">httpd_can_network_connect_cobbler --&gt; off</span><br><span class="line">httpd_can_network_connect_db --&gt; off</span><br><span class="line">httpd_can_network_memcache --&gt; off</span><br><span class="line">httpd_can_network_relay --&gt; off</span><br><span class="line">httpd_can_sendmail --&gt; off</span><br><span class="line">httpd_dbus_avahi --&gt; off</span><br><span class="line">httpd_dbus_sssd --&gt; off</span><br><span class="line">httpd_dontaudit_search_dirs --&gt; off</span><br><span class="line">httpd_enable_cgi --&gt; on</span><br><span class="line">httpd_enable_ftp_server --&gt; off</span><br><span class="line">httpd_enable_homedirs --&gt; off</span><br><span class="line">httpd_execmem --&gt; off</span><br><span class="line">httpd_graceful_shutdown --&gt; on</span><br><span class="line">httpd_manage_ipa --&gt; off</span><br><span class="line">httpd_mod_auth_ntlm_winbind --&gt; off</span><br><span class="line">httpd_mod_auth_pam --&gt; off</span><br><span class="line">httpd_read_user_content --&gt; off</span><br><span class="line">httpd_run_stickshift --&gt; off</span><br><span class="line">httpd_serve_cobbler_files --&gt; off</span><br><span class="line">httpd_setrlimit --&gt; off</span><br><span class="line">httpd_ssi_exec --&gt; off</span><br><span class="line">httpd_sys_script_anon_write --&gt; off</span><br><span class="line">httpd_tmp_exec --&gt; off</span><br><span class="line">httpd_tty_comm --&gt; off</span><br><span class="line">httpd_unified --&gt; off</span><br><span class="line">httpd_use_cifs --&gt; off</span><br><span class="line">httpd_use_fusefs --&gt; off</span><br><span class="line">httpd_use_gpg --&gt; off</span><br><span class="line">httpd_use_nfs --&gt; off</span><br><span class="line">httpd_use_openstack --&gt; off</span><br><span class="line">httpd_use_sasl --&gt; off</span><br><span class="line">httpd_verify_dns --&gt; off</span><br><span class="line">named_tcp_bind_http_port --&gt; off</span><br><span class="line">prosody_bind_http_port --&gt; off</span><br></pre></td></tr></table></figure>
+
+<p><strong>5. 修改SELinux策略中与个人用户主页功能相关的规则布尔值为on,刷新网页</strong><br>参数-P让修改后的SELinux策略规则永久生效且立即生效</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> setsebool -P httpd_enable_homedirs=on</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/User%20Homepages.png" alt></p>
+<h3 id="添加口令功能"><a href="#添加口令功能" class="headerlink" title="添加口令功能"></a>添加口令功能</h3><p><strong>1. <code>htpasswd</code>生成密码数据库</strong><br>-c参数表示第一次生成；后面的是密码数据库的存放文件，以及验证要用到的用户名称（该用户不必是系统中已有的本地账户）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> htpasswd -c /etc/httpd/passwd yanji</span></span><br><span class="line">New password:</span><br><span class="line">Re-type new password: </span><br><span class="line">Adding password for user yanji</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 编辑个人用户主页功能的配置文件，然后重启httpd服务，刷新网页后需输入口令才能访问</strong><br>（RedHat7之前的个人用户主页功能是在主配置文件中的）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> vim /etc/httpd/conf.d/userdir.conf</span></span><br><span class="line">......</span><br><span class="line">31 &lt;Directory "/home/*/public_html"&gt;</span><br><span class="line">32 AllowOverride all</span><br><span class="line"><span class="meta">#</span><span class="bash">密码验证文件保存路径</span></span><br><span class="line">33 authuserfile "/etc/httpd/passwd"</span><br><span class="line"><span class="meta">#</span><span class="bash">当用户尝试访问个人用户网站时的提示信息</span></span><br><span class="line">34 authname "My privately website"</span><br><span class="line">35 authtype basic</span><br><span class="line"><span class="meta">#</span><span class="bash">用户进行账户密码登录时需要验证的用户名称</span></span><br><span class="line">36 require user yanji</span><br><span class="line">37 &lt;/Directory&gt;</span><br><span class="line"><span class="meta">#</span><span class="bash"> systemctl restart httpd</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/Access%20Password%20Required.png" alt="网站提示需要输入账户和密码才能访问"></p>
+<h2 id="虚拟网站主机功能"><a href="#虚拟网站主机功能" class="headerlink" title="虚拟网站主机功能"></a>虚拟网站主机功能</h2><h3 id="基于IP地址"><a href="#基于IP地址" class="headerlink" title="基于IP地址"></a>基于IP地址</h3><p><strong>1. 配置IP地址</strong></p>
+<p><code>nmtui</code>命令打开网络配置页→选中Edit a connection→Edit→【把网络IPv4的配置方式改成Manual（手动）→show】→填写IP地址→OK</p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/Edit%20a%20connection.png" alt="Edit a connection"></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/Edit%20Ethernet.png" alt="Edit Ethernet"></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/Add%20IPv4%20Addresses.png" alt="Add IPv4 Addresses"></p>
+<p><strong>2. 将网卡配置文件中的ONBOOT参数修改成yes，重启网卡</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> vim /etc/sysconfig/network-scripts/ifcfg-eno16777736</span></span><br><span class="line">TYPE=Ethernet #设备类型</span><br><span class="line">BOOTPROTO=none #地址分配模式</span><br><span class="line">DEFROUTE=yes</span><br><span class="line">DNS1=10.11.160.1 #DNS地址</span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">NAME=eno16777728 #网卡名称</span><br><span class="line">UUID=fb861ba7-9b2e-4fe4-81e4-6e940581c86e</span><br><span class="line">ONBOOT=yes #是否启动</span><br><span class="line">IPADDR0=192.168.40.131 #IP地址</span><br><span class="line">PREFIX0=24 #子网掩码的网络号</span><br><span class="line">GATEWAY0=192.168.40.1 #网关地址</span><br><span class="line">IPADDR1=192.168.40.141</span><br><span class="line">PREFIX1=24</span><br><span class="line">IPADDR2=192.168.40.151</span><br><span class="line">PREFIX2=24</span><br><span class="line">IPV6INIT=no</span><br><span class="line">HWADDR=00:0C:29:4A:20:E2</span><br><span class="line"><span class="meta">#</span><span class="bash"> systemctl restart network</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 测试网络连通性</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ping -c 2 192.168.40.131</span></span><br><span class="line">PING 192.168.40.131 (192.168.40.131) 56(84) bytes of data.</span><br><span class="line">64 bytes from 192.168.40.131: icmp_seq=1 ttl=64 time=0.122 ms</span><br><span class="line">64 bytes from 192.168.40.131: icmp_seq=2 ttl=64 time=0.048 ms</span><br><span class="line"></span><br><span class="line">--- 192.168.40.131 ping statistics ---</span><br><span class="line">2 packets transmitted, 2 received, 0% packet loss, time 1000ms</span><br><span class="line">rtt min/avg/max/mdev = 0.048/0.085/0.122/0.037 ms</span><br><span class="line"><span class="meta">#</span><span class="bash"> ping -c 2 192.168.40.141</span></span><br><span class="line">PING 192.168.40.141 (192.168.40.141) 56(84) bytes of data.</span><br><span class="line">64 bytes from 192.168.40.141: icmp_seq=1 ttl=64 time=0.030 ms</span><br><span class="line">64 bytes from 192.168.40.141: icmp_seq=2 ttl=64 time=0.035 ms</span><br><span class="line"></span><br><span class="line">--- 192.168.40.141 ping statistics ---</span><br><span class="line">2 packets transmitted, 2 received, 0% packet loss, time 999ms</span><br><span class="line">rtt min/avg/max/mdev = 0.030/0.032/0.035/0.006 ms</span><br><span class="line"><span class="meta">#</span><span class="bash"> ping -c 2 192.168.40.151</span></span><br><span class="line">PING 192.168.40.151 (192.168.40.151) 56(84) bytes of data.</span><br><span class="line">64 bytes from 192.168.40.151: icmp_seq=1 ttl=64 time=0.133 ms</span><br><span class="line">64 bytes from 192.168.40.151: icmp_seq=2 ttl=64 time=0.043 ms</span><br><span class="line"></span><br><span class="line">--- 192.168.40.151 ping statistics ---</span><br><span class="line">2 packets transmitted, 2 received, 0% packet loss, time 1000ms</span><br><span class="line">rtt min/avg/max/mdev = 0.043/0.088/0.133/0.045 ms</span><br></pre></td></tr></table></figure>
+
+<p><strong>4. 分别在/home/wwwroot中创建用于保存不同网站数据的3个目录，并分别写入网站的首页文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> mkdir -p /home/wwwroot/&#123;131,141,151&#125;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"IP:192.168.40.131"</span> &gt; /home/wwwroot/131/index.html</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"IP:192.168.40.141"</span> &gt; /home/wwwroot/141/index.html</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"IP:192.168.40.151"</span> &gt; /home/wwwroot/151/index.html</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>5. 在httpd配置文件中添加三个基于IP地址的虚拟主机网站参数，重启httpd服务</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> vim /etc/httpd/conf/httpd.conf</span></span><br><span class="line">......</span><br><span class="line">113 &lt;VirtualHost 192.168.40.131&gt;</span><br><span class="line">114     DocumentRoot /home/wwwroot/131</span><br><span class="line">115     ServerName www.zengzhilai.com</span><br><span class="line">116     &lt;Directory /home/wwwroot/131 &gt;</span><br><span class="line">117     AllowOverride None</span><br><span class="line">118     Require all granted</span><br><span class="line">119     &lt;/Directory&gt;</span><br><span class="line">120 &lt;/VirtualHost&gt;</span><br><span class="line">121 &lt;VirtualHost 192.168.40.141&gt;</span><br><span class="line">122     DocumentRoot /home/wwwroot/141</span><br><span class="line">123     ServerName bbs.zengzhilai.com</span><br><span class="line">124     &lt;Directory /home/wwwroot/141 &gt;</span><br><span class="line">125     AllowOverride None</span><br><span class="line">126     Require all granted</span><br><span class="line">127     &lt;/Directory&gt;</span><br><span class="line">128 &lt;/VirtualHost&gt;</span><br><span class="line">129 &lt;VirtualHost 192.168.40.151&gt;</span><br><span class="line">130     DocumentRoot /home/wwwroot/151</span><br><span class="line">131     ServerName mail.zengzhilai.com</span><br><span class="line">132     &lt;Directory /home/wwwroot/151 &gt;</span><br><span class="line">133     AllowOverride None</span><br><span class="line">134     Require all granted</span><br><span class="line">135     &lt;/Directory&gt;</span><br><span class="line">136 &lt;/VirtualHost&gt;</span><br><span class="line">......</span><br><span class="line"><span class="meta">#</span><span class="bash"> systemctl restart httpd</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>6. 访问网站会看到编写的网页，如果显示的是默认首页，则可能是SElinux安全上下文与网站服务不符，<a href="#配置服务文件参数">参考配置服务文件参数的步骤6和7</a></strong></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/192.168.40.131.png" alt></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/192.168.40.141.png" alt></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/192.168.40.151.png" alt></p>
+<h3 id="基于主机域名"><a href="#基于主机域名" class="headerlink" title="基于主机域名"></a>基于主机域名</h3><p><strong>1. 定义IP地址与域名之间对应关系（本来应该用<font color="green">DNS解析服务</font>的，但为演示方便直接修改hosts文件了）</strong></p>
+<p>由于是在Windows系统Chrome浏览器上测试，所以应修改C:\Windows\System32\drivers\etc\HOSTS文件，而Linux的是/etc/hosts文件，添加下面一行即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.40.131 www.zengzhilai.com bbs.zengzhilai.com mail.zengzhilai.com</span><br></pre></td></tr></table></figure>
+
+<p>测试域名是否成功解析</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\zengzhilai&gt;ping www.zengzhilai.com</span><br><span class="line"></span><br><span class="line">正在 Ping www.zengzhilai.com [192.168.40.131] 具有 32 字节的数据:</span><br><span class="line">来自 192.168.40.131 的回复: 字节=32 时间&lt;1ms TTL=64</span><br><span class="line">来自 192.168.40.131 的回复: 字节=32 时间&lt;1ms TTL=64</span><br><span class="line">来自 192.168.40.131 的回复: 字节=32 时间&lt;1ms TTL=64</span><br><span class="line">来自 192.168.40.131 的回复: 字节=32 时间&lt;1ms TTL=64</span><br><span class="line"></span><br><span class="line">192.168.40.131 的 Ping 统计信息:</span><br><span class="line">    数据包: 已发送 = 4，已接收 = 4，丢失 = 0 (0% 丢失)，</span><br><span class="line">往返行程的估计时间(以毫秒为单位):</span><br><span class="line">    最短 = 0ms，最长 = 0ms，平均 = 0ms</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 在/home/wwwroot中创建用于保存不同网站数据的三个目录，并分别写入网站的首页文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> mkdir -p /home/wwwroot/&#123;www,bbs,mail&#125;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"www.zengzhilai.com"</span> &gt; /home/wwwroot/www/index.html</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"bbs.zengzhilai.com"</span> &gt; /home/wwwroot/bbs/index.html</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"mail.zengzhilai.com"</span> &gt; /home/wwwroot/mail/index.html</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 在配置文件写入三个基于主机名的虚拟主机网站参数，重启httpd服务</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> vim /etc/httpd/conf/httpd.conf</span></span><br><span class="line">......</span><br><span class="line">113 &lt;VirtualHost 192.168.40.131&gt;</span><br><span class="line">114     DocumentRoot "/home/wwwroot/www"</span><br><span class="line">115     ServerName "www.zengzhilai.com"</span><br><span class="line">116     &lt;Directory "/home/wwwroot/www" &gt;</span><br><span class="line">117     AllowOverride None</span><br><span class="line">118     Require all granted </span><br><span class="line">119     &lt;/Directory&gt;</span><br><span class="line">120 &lt;/VirtualHost&gt;</span><br><span class="line">121 &lt;VirtualHost 192.168.40.131&gt;</span><br><span class="line">122     DocumentRoot "/home/wwwroot/bbs"</span><br><span class="line">123     ServerName "bbs.zengzhilai.com"</span><br><span class="line">124     &lt;Directory "/home/wwwroot/bbs" &gt;</span><br><span class="line">125     AllowOverride None</span><br><span class="line">126     Require all granted </span><br><span class="line">127     &lt;/Directory&gt;</span><br><span class="line">128 &lt;/VirtualHost&gt;</span><br><span class="line">129 &lt;VirtualHost 192.168.40.131&gt;</span><br><span class="line">130     DocumentRoot "/home/wwwroot/mail"</span><br><span class="line">131     ServerName "mail.zengzhilai.com"</span><br><span class="line">132     &lt;Directory "/home/wwwroot/mail" &gt;</span><br><span class="line">133     AllowOverride None</span><br><span class="line">134     Require all granted </span><br><span class="line">135     &lt;/Directory&gt;</span><br><span class="line">136 &lt;/VirtualHost&gt;</span><br><span class="line">......</span><br><span class="line"><span class="meta">#</span><span class="bash"> systemctl restart httpd</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>4. 正确设置网站数据目录文件的SELinux安全上下文，使其与网站服务功能相吻合</strong><br>（由于在前面的实验中已经设置<code>/home/wwwroot</code>目录及其下的所有文件符合SELinux安全上下文了，所以这一步可省略）</p>
+<p><strong>5. 访问虚拟主机网站</strong></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/www.zengzhilai.com.png" alt="www.zengzhilai.com"></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/bbs.zengzhilai.com.png" alt="bbs.zengzhilai.com"></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/mail.zengzhilai.com.png" alt="mail.zengzhilai.com"></p>
+<h3 id="基于端口号"><a href="#基于端口号" class="headerlink" title="基于端口号"></a>基于端口号</h3><ul>
+<li>可以让用户通过指定的端口号来访问服务器上的网站资源</li>
+<li>需考虑httpd服务程序的配置因素以及SELinux服务对新开设端口的监控</li>
+<li>一般使用80、443、8080等端口号来提供网站访问服务是比较合理的</li>
+</ul>
+<p><strong>1. 在/home/wwwroot中创建用于保存不同网站数据的两个目录，并分别写入网站的首页文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> mkdir -p /home/wwwroot/&#123;6111,6222&#125;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"port:6111"</span> &gt; /home/wwwroot/6111/index.html</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"port:6222"</span> &gt; /home/wwwroot/6222/index.html</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 在httpd服务配置文件中添加用于监听6111和6222端口的参数</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> vim /etc/httpd/conf/httpd.conf</span></span><br><span class="line">......</span><br><span class="line"> 33 #</span><br><span class="line"> 34 # Listen: Allows you to bind Apache to specific IP addresses and/or</span><br><span class="line"> 35 # ports, instead of the default. See also the &lt;VirtualHost&gt;</span><br><span class="line"> 36 # directive.</span><br><span class="line"> 37 #</span><br><span class="line"> 38 # Change this to Listen on specific IP addresses as shown below to </span><br><span class="line"> 39 # prevent Apache from glomming onto all bound IP addresses.</span><br><span class="line"> 40 #</span><br><span class="line"> 41 #Listen 12.34.56.78:80</span><br><span class="line"> 42 Listen 80</span><br><span class="line"> 43 Listen 6111</span><br><span class="line"> 44 Listen 6222</span><br><span class="line"> ......</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.  在httpd服务配置文件中写入两个基于端口号的虚拟主机网站参数</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> vim /etc/httpd/conf/httpd.conf</span></span><br><span class="line">......</span><br><span class="line">114 &lt;VirtualHost 192.168.40.131:6111&gt;</span><br><span class="line">115     DocumentRoot "/home/wwwroot/6111"</span><br><span class="line">116     ServerName www.zengzhilai.com</span><br><span class="line">117     &lt;Directory "/home/wwwroot/6111" &gt;</span><br><span class="line">118     AllowOverride None</span><br><span class="line">119     Require all granted</span><br><span class="line">120     &lt;/Directory&gt;</span><br><span class="line">121 &lt;/VirtualHost&gt;</span><br><span class="line">122 &lt;VirtualHost 192.168.40.131:6222&gt;</span><br><span class="line">123     DocumentRoot "/home/wwwroot/6222"</span><br><span class="line">124     ServerName bbs.zengzhilai.com</span><br><span class="line">125     &lt;Directory "/home/wwwroot/6222" &gt;</span><br><span class="line">126     AllowOverride None</span><br><span class="line">127     Require all granted</span><br><span class="line">128     &lt;/Directory&gt;</span><br><span class="line">129 &lt;/VirtualHost&gt;</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>修改完配置文件后重启httpd服务会出现错误：<br><code>Job for httpd.service failed. See &#39;systemctl status httpd.service&#39; and &#39;journalctl -xn&#39; for details.</code></p>
+<p>这是因为SELinux服务检测到6111和6222端口原本不属于Apache服务应该需要的资源，但现在却以httpd服务程序的名义监听使用了，所以SELinux会拒绝使用Apache服务使用这两个端口</p>
+<p><strong>4. 正确设置网站数据目录文件的SELinux安全上下文，使其与网站服务功能相吻合</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> semanage fcontext -a -t httpd_sys_content_t /home/wwwroot</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> semanage fcontext -a -t httpd_sys_content_t /home/wwwroot/6111</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> semanage fcontext -a -t httpd_sys_content_t /home/wwwroot/6111/*</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> semanage fcontext -a -t httpd_sys_content_t /home/wwwroot/6222</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> semanage fcontext -a -t httpd_sys_content_t /home/wwwroot/6222/*</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> restorecon -Rv /home/wwwroot/</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>5. 添加6111和6222两端口号到SELinux允许的与HTTP协议相关的默认端口号中，重启httpd服务</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> semanage port -a -t http_port_t -p tcp 6111</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> semanage port -a -t http_port_t -p tcp 6222</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> semanage port -l | grep http</span></span><br><span class="line">http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010</span><br><span class="line">http_cache_port_t              udp      3130</span><br><span class="line">http_port_t                    tcp      6111, 6222, 80, 81, 443, 488, 8008, 8009, 8443, 9000</span><br><span class="line">pegasus_http_port_t            tcp      5988</span><br><span class="line">pegasus_https_port_t           tcp      5989</span><br><span class="line"><span class="meta">#</span><span class="bash"> systemctl restart httpd</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>6. 防火墙开放6111和6222端口（关闭防火墙<code>systemctl stop iptables</code>），重启防火墙，访问网站</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> vim /etc/sysconfig/iptables</span></span><br><span class="line">....</span><br><span class="line">-A INPUT -p tcp -m state --state NEW -m tcp --dport 6111 -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m state --state NEW -m tcp --dport 6222 -j ACCEPT</span><br><span class="line">....</span><br><span class="line"><span class="meta">#</span><span class="bash"> systemctl restart iptables</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/port6111.png" alt="port6111"></p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/port6222.png" alt="port6222"></p>
+<p><strong>注意：</strong></p>
+<p>原本端口号是随手打的6666和6667，但是实验后发现chrome浏览器对这两个端口进行了限制，查资料后给出的解释是这样的：</p>
+<blockquote>
+<p>6666-6669是IRC协议使用的缺省端口，有安全风险，容易被木马程序利用，所以webkit内核的chrome缺省状态下禁止访问</p>
+</blockquote>
+<p>FireFox访问给出的解释是这样的（感谢火狐浏览器☺）：</p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/Port%20Restricted.png" alt="Port restricted"></p>
+<h2 id="Apache的访问控制"><a href="#Apache的访问控制" class="headerlink" title="Apache的访问控制"></a>Apache的访问控制</h2><ul>
+<li>Apache可以基于源主机名、源IP地址或源主机上的浏览器特征等信息对网站上的资源进行访问控制</li>
+<li>通过Allow指令允许某个主机访问服务器上的网站资源，通过Deny指令实现禁止访问</li>
+<li>Order指令用来定义Allow或Deny指令起作用的顺序，其匹配原则是按照顺序进行匹配，若匹配成功则执行后面的默认指令</li>
+<li>如“Order Allow, Deny”表示先将源主机与允许规则进行匹配，若匹配成功则允许访问请求，反之则拒绝访问请求</li>
+</ul>
+<p><strong>在服务器上的网站数据目录中新建一个子目录，并创建首页文件</strong><br>在前面已设置<code>/home/wwwroot</code>替代<code>/var/www/html</code>了，所以默认目录变了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> mkdir /home/wwwroot/server</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"Successful"</span> &gt; /var/www/html/server/index.html</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="匹配源主机的浏览器进行访问控制"><a href="#匹配源主机的浏览器进行访问控制" class="headerlink" title="匹配源主机的浏览器进行访问控制"></a>匹配源主机的浏览器进行访问控制</h3><p><strong>在httpd服务的配置文件中添加规则来限制源主机的访问</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> vim /etc/httpd/conf/httpd.conf</span></span><br><span class="line">......</span><br><span class="line"><span class="meta">#</span><span class="bash"> 允许使用Firefox浏览器的主机访问服务器上的首页文件，除此之外的所有请求都将被拒绝</span></span><br><span class="line">129 &lt;Directory "/home/wwwroot/server"&gt;</span><br><span class="line">130     SetEnvIf User-Agent "Firefox" ff=1</span><br><span class="line">131     Order allow,deny</span><br><span class="line">132     Allow from env=ff</span><br><span class="line">133 &lt;/Directory&gt;</span><br><span class="line">......</span><br><span class="line"><span class="meta">#</span><span class="bash"> systemctl restart httpd</span></span><br></pre></td></tr></table></figure>
+
+<p>火狐浏览器访问成功页面：</p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/Firefox%20Success.png" alt></p>
+<p>谷歌浏览器访问被禁止页面：</p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/Chrome%20Forbidden.png" alt></p>
+<h3 id="匹配源主机的IP地址进行访问控制"><a href="#匹配源主机的IP地址进行访问控制" class="headerlink" title="匹配源主机的IP地址进行访问控制"></a>匹配源主机的IP地址进行访问控制</h3><p><strong>在httpd服务的配置文件中添加规则：只允许IP地址为192.168.40.131的主机访问网站资源</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> vim /etc/httpd/conf/httpd.conf</span></span><br><span class="line">......</span><br><span class="line">129 &lt;Directory "/home/wwwroot/server"&gt;</span><br><span class="line">130     Order allow,deny</span><br><span class="line">131     Allow from 192.168.40.131</span><br><span class="line">132 &lt;/Directory&gt;</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>Windows 10 IP地址不符合，被拒绝访问：</p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/Chrome%20Forbidden.png" alt></p>
+<p>服务器的本身的IP地址192.168.40.131符合，允许访问</p>
+<p><img src="https://gitee.com/lzz001/img/raw/master/Apache/IP%20Address%20Conform.png" alt></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Apache/" rel="tag"># Apache</a>
+          
+            <a href="/tags/SElinux/" rel="tag"># SElinux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/21/栈Stack的认识/" rel="next" title="栈Stack的认识">
+                <i class="fa fa-chevron-left"></i> 栈Stack的认识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/13/使用vsftpd服务传输文件/" rel="prev" title="使用vsftpd服务传输文件">
+                使用vsftpd服务传输文件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/zhi.jpg" alt="小智">
+            
+              <p class="site-author-name" itemprop="name">小智</p>
+              <div class="site-description motion-element" itemprop="description">Java,Linux,Mysql</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#WebServer"><span class="nav-number">1.</span> <span class="nav-text">WebServer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验环境"><span class="nav-number">1.1.</span> <span class="nav-text">实验环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Apache安装"><span class="nav-number">1.2.</span> <span class="nav-text">Apache安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置服务文件参数"><span class="nav-number">1.3.</span> <span class="nav-text">配置服务文件参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SELinux安全子系统"><span class="nav-number">1.3.1.</span> <span class="nav-text">SELinux安全子系统</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SELinux服务的三种配置模式"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">SELinux服务的三种配置模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#管理SELinux策略的命令semanage"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">管理SELinux策略的命令semanage</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#个人用户主页功能"><span class="nav-number">1.4.</span> <span class="nav-text">个人用户主页功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单的个人用户主页"><span class="nav-number">1.4.1.</span> <span class="nav-text">简单的个人用户主页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加口令功能"><span class="nav-number">1.4.2.</span> <span class="nav-text">添加口令功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟网站主机功能"><span class="nav-number">1.5.</span> <span class="nav-text">虚拟网站主机功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于IP地址"><span class="nav-number">1.5.1.</span> <span class="nav-text">基于IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于主机域名"><span class="nav-number">1.5.2.</span> <span class="nav-text">基于主机域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于端口号"><span class="nav-number">1.5.3.</span> <span class="nav-text">基于端口号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Apache的访问控制"><span class="nav-number">1.6.</span> <span class="nav-text">Apache的访问控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#匹配源主机的浏览器进行访问控制"><span class="nav-number">1.6.1.</span> <span class="nav-text">匹配源主机的浏览器进行访问控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匹配源主机的IP地址进行访问控制"><span class="nav-number">1.6.2.</span> <span class="nav-text">匹配源主机的IP地址进行访问控制</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小智</span>
+
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">1:44</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '4a3937b2ec1408fa593c',
+    clientSecret: 'bb11519c1d0aafd8540c58fe182487d24b1a1a6f',
+    repo: 'zengzhiLai.github.io',
+    owner: 'zengzhiLai',
+    admin: ['zengzhiLai'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+	<script type="text/javascript" src="js/schemes/clicklove.js"></script>
